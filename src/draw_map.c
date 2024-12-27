@@ -46,7 +46,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle)
 		i--;
 	if (float_equal((float)j, pos_y) && j != 0 && ((angle > M_PI)))
 		j--;
-	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]); 
+	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 		return (1);
 	return (0);
@@ -177,7 +177,7 @@ void	draw_3d(t_data *data, t_player *player, t_image *image)
 	{
 
 		distant = rainbow(data, player, (player->orient + current_angle));
-		//only in range of proper distance 
+		//only in range of proper distance
 		//add color do #define
 		//printf("DISTANCE: %f\n", distant);
 			//draw_half(image, 13158350, 15329736);
@@ -250,7 +250,30 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 		i++;
 	}
 }
-/*
+
+void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *image)
+{
+	int		center[2];
+	int		line_len;
+	int		line[2];
+	int		i;
+	int		hit_wall_flag;
+
+	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
+	center[1] = player->x + (PLAYER_SIZE_V1 / 2);
+	line_len = 500;
+	i = 0;
+	hit_wall_flag = 0;
+	while (i < line_len && hit_wall_flag == 0)
+	{
+		line[0] = center[0] + i * sin(player->orient + angle);
+		line[1] = center[1] + i * cos(player->orient + angle);
+		if (!is_wall_line(data_(), line[0], line[1], &hit_wall_flag))
+			my_mlx_pixel_put(image, line[0], line[1], color);
+		i++;
+	}
+}
+
 void	draw_player_rays(t_player *player, float angle_min, float angle_max, int num_rays, int color, t_image *image)
 {
 	float	angle_step;
@@ -264,11 +287,11 @@ void	draw_player_rays(t_player *player, float angle_min, float angle_max, int nu
 	i = 0;
 	while (i < num_rays)
 	{
-		draw_line_at_angle(player, current_angle, color, image);
+		draw_line_at_angle_map(player, current_angle, color, image);
 		current_angle += angle_step;
 		i++;
 	}
-}*/
+}
 
 void	draw_player(t_player *player)
 {
@@ -278,17 +301,16 @@ void	draw_player(t_player *player)
 		//player->x = ((player->x *BLOCK_SIZE) + (BLOCK_SIZE / 2)) - (PLAYER_SIZE_V1 / 2);
 		player->y = (player->y * BLOCK_SIZE);
 		player->x = (player->x * BLOCK_SIZE);
-		
+
 		data_()->first_render = 1;
 	}
 	//printf("PL_X: %f PL_Y: %f\n", player->x, player->y);
 	draw_square_to_image(player->x, player->y, 0x00FF0000, PLAYER_SIZE_V1, data_()->frame);
-	//draw_line_at_angle(player, 0, 0xFFFFFF, data_()->frame);
-	draw_rays_range(player, -FOV_WIDE, FOV_WIDE, 21, 0xFFFFFF, data_()->frame);
-	//draw_player_rays(player, -FOV_WIDE, FOV_WIDE, FOV_DEEPNESS, 0xFFFFFF, data_()->frame);
+	// draw_line_at_angle_map(player, 0, 0xFFFFFF, data_()->frame);
+	draw_player_rays(player, -FOV_WIDE, FOV_WIDE, FOV_DEEPNESS, 0xE7E7E7, data_()->frame);
 }
 
-//ceil color and floor color 
+//ceil color and floor color
 void	draw_half(t_image *image, int ccolor, int fcolor)
 {
 	//[0] = x [1] = y
@@ -471,6 +493,7 @@ int	loop_handler(void *param)
 		apply_changes(data);
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);
+		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 21, 0xFFFFFF, data_()->frame);
 		draw_minimap(data);
 		//clear_rest(data);
 		draw_player(data->player);

@@ -52,4 +52,7 @@ re: fclean all
 1:
 	@make && ./$(NAME) map.cub
 
+2:
+	@make && ./$(NAME) map2.cub
+
 .PHONY: all clean fclean re

@@ -27,7 +27,7 @@ void	player_input(t_binds *key, int keycode, bool pressed)
 	if (keycode == 65363)
 		key->camera_right = pressed;
 	if (keycode == 65307)
-		key->esc = pressed;
+		close_window(data_());
 }
 
 
