@@ -14,6 +14,9 @@
 # define PLAYER_SPEED 0.5
 # define ROTATION_SPEED 0.007
 
+# define NUMBER_OF_TEXTURES 1
+# define TEXTURE_SIZE 64
+
 # define W 119
 # define UP 65362
 # define S 115
@@ -43,6 +46,12 @@
 # include <stdbool.h>
 # include <time.h>
 
+typedef enum e_type
+{
+	WALL_,
+}	t_type;
+
+
 typedef struct s_image
 {
 	void	*img_ptr;
@@ -52,6 +61,7 @@ typedef struct s_image
 	int		endian;
 	int		width;
 	int		height;
+	int		pixels[TEXTURE_SIZE][TEXTURE_SIZE];
 }	t_image;
 
 typedef struct s_binds
@@ -83,6 +93,7 @@ typedef struct s_data {
 	int			matrix_height;
 	int			dif_timer;
 	t_binds		*key;
+	t_image		textures[NUMBER_OF_TEXTURES];
 	t_image		*frame;
 	t_image		*black_screen;
 	t_player	*player;

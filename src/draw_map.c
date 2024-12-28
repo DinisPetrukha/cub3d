@@ -502,7 +502,7 @@ int	loop_handler(void *param)
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);
 		//FOR DRAW_RAYS_RANGE NUMBER OF RAYS MUST BE ODD
-		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 51, 0xFFFFFF, data_()->frame);
+		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 151, 0xFFFFFF, data_()->frame);
 		draw_minimap(data);
 		//clear_rest(data);
 		draw_player(data->player);

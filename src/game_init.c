@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/12/09 09:32:45 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:24:13 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,39 @@ void	init_data(t_data *data)
 
 	data->player = &player;
 	check_player(data->map, data->player);
+}
+
+void	copy_static_array(t_image *img)
+{
+	int	x;
+	int	y;
+	int	pixel_offset;
+
+	y = 0;
+	while (y < TEXTURE_SIZE)
+	{
+		while (x < TEXTURE_SIZE)
+		{
+			pixel_offset = y * img->line_len + x * (img->bpp / 8);
+			img->pixels[y][x] = *(int *)(img->addr + pixel_offset);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	load_image(char *path, t_image *img, void *mlx_ptr)
+{
+	img->img_ptr = mlx_xpm_file_to_image(mlx_ptr, path,
+			&img->width, &img->height);
+	img->addr = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->line_len,
+			&img->endian);
+}
+
+void	load_all_images(t_data *data)
+{
+	load_image("texture/red_brick.xpm",
+		&data->textures[WALL_], data->mlx_ptr);
 }
 
 // Retun 1 if success
@@ -43,6 +76,7 @@ int	game_init(void)
 	init_image(data->frame);
 	data->black_screen = &black_screen;
 	init_image(data->black_screen);
+	load_all_images(data);
 	init_keys(data);
 	// Close window when X it's Clicked
 	mlx_hook(data->window, DestroyNotify, StructureNotifyMask,
