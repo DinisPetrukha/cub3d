@@ -34,6 +34,7 @@ int	float_equal(float a, float b)
 	return (0);
 }
 
+//VE A COLISAO DEPENDENDO DO LADO QUE O RAIO VEM
 int	collision(char	**map, float pos_x, float pos_y, float angle)
 {
 	int	i;
@@ -52,6 +53,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle)
 	return (0);
 }
 
+//CALCULO DE DISTANCIA ENTRE DOIS PONTOS QUAISQUER (X, Y)
 float	distance(float x1, float y1, float x2, float y2)
 {
 	float sqr_difx;
@@ -66,6 +68,7 @@ float	distance(float x1, float y1, float x2, float y2)
 	return (value);
 }
 
+//TESTE DE DISTANCIA PARA RAIO VERTICAL
 int	vertical_ray(t_data *data, float m, float n, float interval, float angle)
 {
 	float	center[2];
@@ -94,6 +97,7 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle)
 	return (distance(center[0], center[1], new_x, y));
 }
 
+//TESTE DE DISTANCIA PARA RAIO HORIZONTAL
 int	horizontal_ray(t_data *data, float m, float n, float interval, float angle)
 {
 	float	center[2];
@@ -123,16 +127,19 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle)
 	return (distance(center[0], center[1], x, new_y));
 }
 
+//DEVOLVE DISTANCIA DE UM RAIO
 float	rainbow(t_data *data, t_player *player, float angle)
 {
 	float	center[2];
 	float	increment[2];
 	float	rays[2];
+	//VALORES DA RETA-RAIO
 	float	m;
 	float	n;
 
 	center[0] = (player->x + (PLAYER_SIZE_V1 / 2));
 	center[1] = (player->y + (PLAYER_SIZE_V1 / 2));
+	//VE PARA QUE LADO VAMOS INCREMENTAR DEPOIS
 	if (sin(angle) > 0)
 		increment[1] = BLOCK_SIZE;
 	else if (sin(angle) < 0)
@@ -155,6 +162,7 @@ float	rainbow(t_data *data, t_player *player, float angle)
 	//printf("horizontal_ray: %f\n", rays[0]);
 	rays[1] = vertical_ray(data, m, n, increment[0], angle);
 	//printf("vertical_ray: %f\n", rays[1]);
+	//VER QUAL E O RAIO COM MENOR DISTANCIA
 	if ((rays[0] <= rays[1] && rays[0] != -1) || rays[1] == -1)
 		return (rays[0]);
 	return (rays[1]);
@@ -493,7 +501,8 @@ int	loop_handler(void *param)
 		apply_changes(data);
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);
-		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 21, 0xFFFFFF, data_()->frame);
+		//FOR DRAW_RAYS_RANGE NUMBER OF RAYS MUST BE ODD
+		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 51, 0xFFFFFF, data_()->frame);
 		draw_minimap(data);
 		//clear_rest(data);
 		draw_player(data->player);
