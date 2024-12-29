@@ -35,7 +35,7 @@ int	float_equal(float a, float b)
 }
 
 //VE A COLISAO DEPENDENDO DO LADO QUE O RAIO VEM
-int	collision(char	**map, float pos_x, float pos_y, float angle)
+int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_arr[2])
 {
 	int	i;
 	int	j;
@@ -49,7 +49,11 @@ int	collision(char	**map, float pos_x, float pos_y, float angle)
 		j--;
 	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
+	{
+		coords_arr[0] = pos_y;
+		coords_arr[1] = pos_x;
 		return (1);
+	}
 	return (0);
 }
 
@@ -69,7 +73,7 @@ float	distance(float x1, float y1, float x2, float y2)
 }
 
 //TESTE DE DISTANCIA PARA RAIO VERTICAL
-int	vertical_ray(t_data *data, float m, float n, float interval, float angle)
+int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[2])
 {
 	float	center[2];
 	float	new_x;
@@ -89,7 +93,7 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle)
 		//printf("VER: %f %f\n", new_x, y);
 		if (y < 0 || y > (data->matrix_height * BLOCK_SIZE))
 			return (-1);
-		if (collision(data->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle))
+		if (collision(data->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle, coords_ver))
 			break ;
 		new_x += interval;
 	}
@@ -98,7 +102,7 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle)
 }
 
 //TESTE DE DISTANCIA PARA RAIO HORIZONTAL
-int	horizontal_ray(t_data *data, float m, float n, float interval, float angle)
+int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[2])
 {
 	float	center[2];
 	float	x;
@@ -120,7 +124,7 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle)
 		//WONT WORK WITH IRREGULAR-END MAPS
 		if (x < 0 || x > (data->matrix_width * BLOCK_SIZE))
 			return (-1);
-		if (collision(data->map, x / BLOCK_SIZE, new_y / BLOCK_SIZE, angle))
+		if (collision(data->map, x / BLOCK_SIZE, new_y / BLOCK_SIZE, angle, coords_hor))
 			break ;
 		new_y += interval;
 	}
@@ -128,12 +132,14 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle)
 }
 
 //DEVOLVE DISTANCIA DE UM RAIO
-float	rainbow(t_data *data, t_player *player, float angle)
+float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[2])
 {
 	float	center[2];
 	float	increment[2];
 	float	rays[2];
 	//VALORES DA RETA-RAIO
+	float	coords_hor[2];
+	float	coords_ver[2];
 	float	m;
 	float	n;
 
@@ -153,50 +159,56 @@ float	rainbow(t_data *data, t_player *player, float angle)
 	else
 		increment[0] = 0;
 	if (angle == M_PI / 2 || angle == 3 * M_PI / 2)
-		return (horizontal_ray(data, 0, 0, increment[1], angle));
+		return (horizontal_ray(data, 0, 0, increment[1], angle, collision_cords));
 	m = tan(angle);
 	n = center[1] - (m * center[0]);
 	//printf("PX: %f PY: %f\n", center[0], center[1]);
 	//printf("Y = %f x + %f | ANGLE: %f\n", m, n, angle);
-	rays[0] = horizontal_ray(data, m, n, increment[1], angle);
+	rays[0] = horizontal_ray(data, m, n, increment[1], angle, coords_hor);
 	//printf("horizontal_ray: %f\n", rays[0]);
-	rays[1] = vertical_ray(data, m, n, increment[0], angle);
+	rays[1] = vertical_ray(data, m, n, increment[0], angle, coords_ver);
 	//printf("vertical_ray: %f\n", rays[1]);
 	//VER QUAL E O RAIO COM MENOR DISTANCIA
 	if ((rays[0] <= rays[1] && rays[0] != -1) || rays[1] == -1)
+	{
+		collision_cords[0] = coords_hor[0];
+		collision_cords[1] = coords_hor[1];
 		return (rays[0]);
+	}
+	collision_cords[0] = coords_ver[0];
+	collision_cords[1] = coords_ver[1];
 	return (rays[1]);
 }
 
-void	draw_3d(t_data *data, t_player *player, t_image *image)
-{
-	//#define RENDER_DISTANCE == FOV_DEEPNESS
-	//0.5 radians == 60o
-//	float	render_distance;
-	float	current_angle;
-	float	distant;
-	float	angle_step;
-	int	i;
+// void	draw_3d(t_data *data, t_player *player, t_image *image)
+// {
+// 	//#define RENDER_DISTANCE == FOV_DEEPNESS
+// 	//0.5 radians == 60o
+// //	float	render_distance;
+// 	float	current_angle;
+// 	float	distant;
+// 	float	angle_step;
+// 	int		i;
 
-	i = 0;
-	current_angle = 0;
-	angle_step = (WINDOW_WIDTH / FOV_WIDE);
-	while (i < WINDOW_WIDTH)
-	{
+// 	i = 0;
+// 	current_angle = 0;
+// 	angle_step = (WINDOW_WIDTH / FOV_WIDE);
+// 	while (i < WINDOW_WIDTH)
+// 	{
 
-		distant = rainbow(data, player, (player->orient + current_angle));
-		//only in range of proper distance
-		//add color do #define
-		//printf("DISTANCE: %f\n", distant);
-			//draw_half(image, 13158350, 15329736);
-		if ((int)distant >= 6 && ((int)distant <= FOV_DEEPNESS))
-			draw_bar(image, distant, 500, 30000);
-		else
-			draw_bar(image, 6, 500, 1);
-		current_angle += angle_step;
-		i++;
-	}
-}
+// 		distant = rainbow(data, player, (player->orient + current_angle));
+// 		//only in range of proper distance
+// 		//add color do #define
+// 		//printf("DISTANCE: %f\n", distant);
+// 			//draw_half(image, 13158350, 15329736);
+// 		if ((int)distant >= 6 && ((int)distant <= FOV_DEEPNESS))
+// 			draw_bar(image, distant, 500, 30000);
+// 		else
+// 			draw_bar(image, 6, 500, 1);
+// 		current_angle += angle_step;
+// 		i++;
+// 	}
+// }
 
 
 void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, t_image *image)
@@ -207,6 +219,8 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	int		i;
 	int		hit_wall_flag;
 	float		distant;
+	float	collision_cords[2];
+
 
 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
 	center[1] = player->x + (PLAYER_SIZE_V1 / 2);
@@ -221,7 +235,8 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 			my_mlx_pixel_put(image, line[0], line[1], color);
 		i++;
 	}
-	distant = rainbow(data_(), player, (player->orient + angle));
+	distant = rainbow(data_(), player, (player->orient + angle), collision_cords);
+	printf("Colision Y:%f X:%f\n", collision_cords[0], collision_cords[1]);
 //https://stackoverflow.com/questions/66591163/how-do-i-fix-the-warped-perspective-in-my-raycaster
 	distant = fabs(distant * (cosf(angle)));
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
@@ -502,7 +517,7 @@ int	loop_handler(void *param)
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);
 		//FOR DRAW_RAYS_RANGE NUMBER OF RAYS MUST BE ODD
-		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 151, 0xFFFFFF, data_()->frame);
+		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 101, 0xFFFFFF, data_()->frame);
 		draw_minimap(data);
 		//clear_rest(data);
 		draw_player(data->player);
