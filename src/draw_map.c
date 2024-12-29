@@ -35,7 +35,7 @@ int	float_equal(float a, float b)
 }
 
 //VE A COLISAO DEPENDENDO DO LADO QUE O RAIO VEM
-int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_arr[2])
+int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_arr[3])
 {
 	int	i;
 	int	j;
@@ -52,6 +52,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 	{
 		coords_arr[0] = pos_y;
 		coords_arr[1] = pos_x;
+		coords_arr[2] = map[j][i];
 		return (1);
 	}
 	return (0);
@@ -73,7 +74,7 @@ float	distance(float x1, float y1, float x2, float y2)
 }
 
 //TESTE DE DISTANCIA PARA RAIO VERTICAL
-int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[2])
+int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[3])
 {
 	float	center[2];
 	float	new_x;
@@ -102,7 +103,7 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle, fl
 }
 
 //TESTE DE DISTANCIA PARA RAIO HORIZONTAL
-int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[2])
+int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[3])
 {
 	float	center[2];
 	float	x;
@@ -132,14 +133,14 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, 
 }
 
 //DEVOLVE DISTANCIA DE UM RAIO
-float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[2])
+float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[3])
 {
 	float	center[2];
 	float	increment[2];
 	float	rays[2];
 	//VALORES DA RETA-RAIO
-	float	coords_hor[2];
-	float	coords_ver[2];
+	float	coords_hor[3];
+	float	coords_ver[3];
 	float	m;
 	float	n;
 
@@ -173,10 +174,12 @@ float	rainbow(t_data *data, t_player *player, float angle, float collision_cords
 	{
 		collision_cords[0] = coords_hor[0];
 		collision_cords[1] = coords_hor[1];
+		collision_cords[2] = coords_hor[2];
 		return (rays[0]);
 	}
 	collision_cords[0] = coords_ver[0];
 	collision_cords[1] = coords_ver[1];
+	collision_cords[2] = coords_ver[2];
 	return (rays[1]);
 }
 
@@ -219,7 +222,7 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	int		i;
 	int		hit_wall_flag;
 	float		distant;
-	float	collision_cords[2];
+	float	collision_cords[3];
 
 
 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
@@ -236,7 +239,7 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 		i++;
 	}
 	distant = rainbow(data_(), player, (player->orient + angle), collision_cords);
-	printf("Colision Y:%f X:%f\n", collision_cords[0], collision_cords[1]);
+	printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
 //https://stackoverflow.com/questions/66591163/how-do-i-fix-the-warped-perspective-in-my-raycaster
 	distant = fabs(distant * (cosf(angle)));
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
