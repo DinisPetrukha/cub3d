@@ -221,7 +221,7 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	int		line[2];
 	int		i;
 	int		hit_wall_flag;
-	float		distant;
+	float	distant;
 	float	collision_cords[3];
 
 
@@ -238,10 +238,10 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 			my_mlx_pixel_put(image, line[0], line[1], color);
 		i++;
 	}
+	//https://stackoverflow.com/questions/66591163/how-do-i-fix-the-warped-perspective-in-my-raycaster
 	distant = rainbow(data_(), player, (player->orient + angle), collision_cords);
+	distant = fabs(distant * cosf(angle));
 	printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
-//https://stackoverflow.com/questions/66591163/how-do-i-fix-the-warped-perspective-in-my-raycaster
-	distant = fabs(distant * (cosf(angle)));
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
 		draw_bar(image, distant, window_x, 30000);
 	else
@@ -371,24 +371,19 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color)
 	float	bar_size;
 	int	cur_y;
 	int	start_y;
+	int	end_y;
 
 	//bar_size = WINDOW_HEIGHT - (distant - PLAYER_SIZE_V1 / 2) * (WINDOW_HEIGHT - 1) / (FOV_DEEPNESS - PLAYER_SIZE_V1 / 2);
-	bar_size = (int)round((1 - (distant / FOV_DEEPNESS)) * WINDOW_HEIGHT);
-	start_y = (WINDOW_HEIGHT / 2) - ((int)ceilf(bar_size) / 2);
+	bar_size = (BLOCK_SIZE_3D / distant) * DISTANCE_TO_SCREEN;
+	start_y = (WINDOW_HEIGHT / 2) - ((int)bar_size / 2);
+	end_y = (WINDOW_HEIGHT / 2) + ((int)bar_size / 2);
 	cur_y = 0;
-	//VAI ESCREVER POR CIMA DO MINIMAPA!
 	while (cur_y < WINDOW_HEIGHT)
 	{
-		if (cur_y == start_y)
-		{
-			while (cur_y - start_y < (int)ceilf(bar_size))
-			{
-				my_mlx_pixel_put(image, cur_y, pos_x, color);
-				cur_y++;
-			}
-		}
+		if (cur_y >= start_y && cur_y < end_y)
+			my_mlx_pixel_put(image, cur_y, pos_x, color); // Cor da barra
 		else
-			my_mlx_pixel_put(image, cur_y, pos_x, 1);
+			my_mlx_pixel_put(image, cur_y, pos_x, 1); // Fundo/preenchimento
 		cur_y++;
 	}
 }

@@ -5,10 +5,12 @@
 #  define BUFFER_SIZE 10
 # endif
 
+# define WINDOW_HEIGHT	1000
+# define WINDOW_WIDTH	1000
 # define BLOCK_SIZE 32
 # define PLAYER_SIZE_V1 12
-
 # define FOV_WIDE 0.5
+# define FOV 1.0472 // 60 degrees in raians
 # define FOV_DEEPNESS 300
 
 # define PLAYER_SPEED 0.5
@@ -16,6 +18,9 @@
 
 # define NUMBER_OF_TEXTURES 1
 # define TEXTURE_SIZE 64
+
+# define BLOCK_SIZE_3D 64.0f
+# define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
 
 # define W 119
 # define UP 65362
@@ -28,9 +33,6 @@
 
 # define ESC 65307
 # define Q 113
-
-# define WINDOW_HEIGHT	1000
-# define WINDOW_WIDTH	1000
 
 # include <math.h>
 # include "mlx_linux/mlx.h"
