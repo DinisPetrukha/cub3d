@@ -21,6 +21,7 @@
 
 # define BLOCK_SIZE_3D 64.0f
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
+# define MAX_BAR_HEIGHT 900
 
 # define W 119
 # define UP 65362
@@ -56,14 +57,14 @@ typedef enum e_type
 
 typedef struct s_image
 {
-	void	*img_ptr;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-	int		pixels[TEXTURE_SIZE][TEXTURE_SIZE];
+	void			*img_ptr;
+	char			*addr;
+	int				bpp;
+	int				line_len;
+	int				endian;
+	int				width;
+	int				height;
+	unsigned int	pixels[TEXTURE_SIZE][TEXTURE_SIZE];
 }	t_image;
 
 typedef struct s_binds
@@ -139,7 +140,7 @@ void	player_input(t_binds *key, int keycode, bool pressed);
 //DRAW_MAP
 
 void	draw_half(t_image *image, int ccolor, int fcolor);
-void	draw_bar(t_image *image, float distant, int pos_x, int color);
+void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3]);
 
 int		loop_handler(void *param);
 void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num_rays, int color, t_image *image);
@@ -147,6 +148,8 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 void	draw_square_to_image(int x, int y, int color, int size, t_image *image);
 void	draw_player(t_player *player);
 void	my_mlx_pixel_put(t_image *image, int y, int x, int color);
+unsigned int	my_mlx_pixel_get(t_image *data, int x, int y);
+
 
 //IS_VALID
 void	exitmap(char **map, int ret, char *msg);

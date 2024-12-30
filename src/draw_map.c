@@ -22,6 +22,14 @@ void	my_mlx_pixel_put(t_image *image, int y, int x, int color)
 	*(unsigned int *)dst = color;
 }
 
+unsigned int	my_mlx_pixel_get(t_image *data, int x, int y)
+{
+	char	*dst;
+
+	dst = data->addr + (y * data->line_len + x * (data->bpp / 8));
+	return (*(unsigned int *)dst);
+}
+
 int	float_equal(float a, float b)
 {
 	float	difference;
@@ -241,13 +249,13 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	//https://stackoverflow.com/questions/66591163/how-do-i-fix-the-warped-perspective-in-my-raycaster
 	distant = rainbow(data_(), player, (player->orient + angle), collision_cords);
 	distant = fabs(distant * cosf(angle));
-	printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
+	//printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
-		draw_bar(image, distant, window_x, 30000);
+		draw_bar(image, distant, window_x, 30000, collision_cords);
 	else
 	{
 		//printf("DISTANCE: %f\n", distant);
-		draw_bar(image, 6, window_x, 1);
+		draw_bar(image, 6, window_x, 1, collision_cords);
 	}
 }
 
@@ -366,26 +374,47 @@ void	draw_half(t_image *image, int ccolor, int fcolor)
 	}
 }
 
-void	draw_bar(t_image *image, float distant, int pos_x, int color)
+void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3])
 {
 	float	bar_size;
-	int	cur_y;
-	int	start_y;
-	int	end_y;
+	int		cur_y;
+	int		start_y;
+	int		end_y;
+	float	wall_x;
+	int		texture_x, texture_y;
 
 	//bar_size = WINDOW_HEIGHT - (distant - PLAYER_SIZE_V1 / 2) * (WINDOW_HEIGHT - 1) / (FOV_DEEPNESS - PLAYER_SIZE_V1 / 2);
+	color *= 2;
 	bar_size = (BLOCK_SIZE_3D / distant) * DISTANCE_TO_SCREEN;
 	start_y = (WINDOW_HEIGHT / 2) - ((int)bar_size / 2);
 	end_y = (WINDOW_HEIGHT / 2) + ((int)bar_size / 2);
+	// Determinar se o raio que vamos pintar bateu na parede vetical ou horizontal
+	if (fabs(collision_cords[0] - floor(collision_cords[0])) < 0.0001)
+		wall_x = collision_cords[1] - floor(collision_cords[1]);
+	else
+		wall_x = collision_cords[0] - floor(collision_cords[0]);
+
+	texture_x = (int)(wall_x * 64) % 64; // Mapeia para a textura
 	cur_y = 0;
 	while (cur_y < WINDOW_HEIGHT)
 	{
 		if (cur_y >= start_y && cur_y < end_y)
-			my_mlx_pixel_put(image, cur_y, pos_x, color); // Cor da barra
+		{
+			texture_y = (int)(((cur_y - start_y) / (float)(end_y - start_y)) * 64);
+			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_].pixels[texture_y][texture_x]);
+		}
 		else
-			my_mlx_pixel_put(image, cur_y, pos_x, 1); // Fundo/preenchimento
+			my_mlx_pixel_put(image, cur_y, pos_x, 1);
 		cur_y++;
 	}
+	// while (cur_y < WINDOW_HEIGHT)
+	// {
+	// 	if (cur_y >= start_y && cur_y < end_y)
+	// 		my_mlx_pixel_put(image, cur_y, pos_x, color); // Cor da barra
+	// 	else
+	// 		my_mlx_pixel_put(image, cur_y, pos_x, 1); // Fundo/preenchimento
+	// 	cur_y++;
+	// }
 }
 
 void	draw_rectangle_to_image(t_image *image, int start[2], int end[2], int color)

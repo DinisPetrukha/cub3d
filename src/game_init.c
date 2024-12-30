@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/12/29 15:11:18 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:59:52 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,14 @@ void	copy_static_array(t_image *img)
 {
 	int	x;
 	int	y;
-	int	pixel_offset;
 
 	y = 0;
 	while (y < TEXTURE_SIZE)
 	{
+		x = 0;
 		while (x < TEXTURE_SIZE)
 		{
-			pixel_offset = y * img->line_len + x * (img->bpp / 8);
-			img->pixels[y][x] = *(int *)(img->addr + pixel_offset);
+			img->pixels[y][x] = my_mlx_pixel_get(img, x, y);
 			x++;
 		}
 		y++;
@@ -51,6 +50,16 @@ void	load_all_images(t_data *data)
 {
 	load_image("texture/red_brick.xpm",
 		&data->textures[WALL_], data->mlx_ptr);
+	copy_static_array(&data->textures[WALL_]);
+}
+
+void print_texture(unsigned texture[TEXTURE_SIZE][TEXTURE_SIZE]) {
+	for (int y = 0; y < TEXTURE_SIZE; y++) {
+		for (int x = 0; x < TEXTURE_SIZE; x++) {
+			printf("%3d", texture[y][x]);  // Exibe cada valor da textura
+		}
+		printf("\n");  // Pula para a próxima linha após imprimir uma linha da textura
+	}
 }
 
 // Retun 1 if success
@@ -71,12 +80,12 @@ int	game_init(void)
 	if (!data->window)
 		return (0);
 	// Initializing The Main Frame
-	printf("Map Height: %i\nMap Width: %i\n", data->matrix_height, data->matrix_width);
 	data->frame = &frame;
 	init_image(data->frame);
 	data->black_screen = &black_screen;
 	init_image(data->black_screen);
 	load_all_images(data);
+	print_texture(data->textures[WALL_].pixels);
 	init_keys(data);
 	// Close window when X it's Clicked
 	mlx_hook(data->window, DestroyNotify, StructureNotifyMask,
