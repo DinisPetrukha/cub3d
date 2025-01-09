@@ -121,7 +121,6 @@ void apply_changes(t_data *data)
 		if (!is_wall_player(data, player->y, player->x + pos_x))
 			player->x += pos_x;
 	}
-
 	// Rotação da câmera
 	if (data->key->camera_left) {
 		player->orient -= ROTATION_SPEED;

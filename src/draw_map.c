@@ -560,6 +560,7 @@ int	loop_handler(void *param)
 	t_data *data = (t_data *)param;
 	// if ((data->dif_timer != instant.tv_nsec / 100000000) && (instant.tv_nsec / 100000000 % 1 == 0))
 	// {
+	printf("PLAYER: ORIENT: %f\n", data->player->orient);
 		apply_changes(data);
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);

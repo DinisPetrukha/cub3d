@@ -95,6 +95,9 @@ typedef struct s_data {
 	int			matrix_width;
 	int			matrix_height;
 	int			dif_timer;
+	int		ceiling_textured;
+	int		floor_textured;
+//	char		*textures; [0] = N [1] = E [2] = S [3] = W
 	t_binds		*key;
 	t_image		textures[NUMBER_OF_TEXTURES];
 	t_image		*frame;

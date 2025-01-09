@@ -85,7 +85,7 @@ int	game_init(void)
 	data->black_screen = &black_screen;
 	init_image(data->black_screen);
 	load_all_images(data);
-	print_texture(data->textures[WALL_].pixels);
+	//print_texture(data->textures[WALL_].pixels);
 	init_keys(data);
 	// Close window when X it's Clicked
 	mlx_hook(data->window, DestroyNotify, StructureNotifyMask,

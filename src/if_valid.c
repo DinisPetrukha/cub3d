@@ -100,6 +100,14 @@ void	check_player(char **map, t_player *player)
 		i = 0;
 		while (map[j][i])
 		{
+			if (map[j][i] == 'N')
+				player->orient = 3 * M_PI / 2; // 90º
+			if (map[j][i] == 'S')
+				player->orient = M_PI / 2; // 270º
+			if (map[j][i] == 'W')
+				player->orient = M_PI; // 180º
+			if (map[j][i] == 'E')
+				player->orient = 0;
 			if (map[j][i] > 'A' && map[j][i] < 'Z')
 			{
 				player->y = j + 0.5;
@@ -107,14 +115,6 @@ void	check_player(char **map, t_player *player)
 				data_()->map[j][i] = '0';
 				player_n++;
 			}
-			if (map[j][i] == 'N')
-				player->orient = M_PI / 2; // 90º
-			if (map[j][i] == 'S')
-				player->orient = 3 * M_PI / 2; // 270º
-			if (map[j][i] == 'W')
-				player->orient = M_PI; // 180º
-			if (map[j][i] == 'E')
-				player->orient = 0;
 			i++;
 		}
 		j++;
