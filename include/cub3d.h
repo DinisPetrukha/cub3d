@@ -140,6 +140,7 @@ void	player_input(t_binds *key, int keycode, bool pressed);
 //DRAW_MAP
 
 void	draw_half(t_image *image, int ccolor, int fcolor);
+void	empty_bar(t_image *image, int pos_x);
 void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3]);
 
 int		loop_handler(void *param);

@@ -251,11 +251,15 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	distant = fabs(distant * cosf(angle));
 	//printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
+	{
+		//printf("YO\n");
 		draw_bar(image, distant, window_x, 30000, collision_cords);
+	}
 	else
 	{
+		empty_bar(image, window_x);
 		//printf("DISTANCE: %f\n", distant);
-		draw_bar(image, 6, window_x, 1, collision_cords);
+		//draw_bar(image, 6, window_x, 1, collision_cords);
 	}
 }
 
@@ -374,6 +378,24 @@ void	draw_half(t_image *image, int ccolor, int fcolor)
 	}
 }
 
+void	empty_bar(t_image *image, int pos_x)
+{
+	int	pos_y;
+	
+	pos_y = 0;
+	while(pos_y < WINDOW_HEIGHT / 2)
+	{
+		my_mlx_pixel_put(image, pos_y, pos_x, 5078158);
+		pos_y++;
+	}
+	while(pos_y < WINDOW_HEIGHT)
+	{
+		my_mlx_pixel_put(image, pos_y, pos_x, 8473150);
+		pos_y++;
+	}
+}
+
+
 void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3])
 {
 	float	bar_size;
@@ -394,7 +416,7 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 	else
 		wall_x = collision_cords[0] - floor(collision_cords[0]);
 
-	texture_x = (int)(wall_x * 64) % 64; // Mapeia para a textura
+	texture_x = (int)(wall_x * 64) % 64; // Mapeta para a textura
 	cur_y = 0;
 	while (cur_y < WINDOW_HEIGHT)
 	{
@@ -404,17 +426,15 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_].pixels[texture_y][texture_x]);
 		}
 		else
-			my_mlx_pixel_put(image, cur_y, pos_x, 1);
+		{
+			if (cur_y < WINDOW_HEIGHT / 2)
+				my_mlx_pixel_put(image, cur_y, pos_x, 5078158);
+			else
+				my_mlx_pixel_put(image, cur_y, pos_x, 8473150);
+			//printf("LIMPADOR\n\n");
+		}
 		cur_y++;
 	}
-	// while (cur_y < WINDOW_HEIGHT)
-	// {
-	// 	if (cur_y >= start_y && cur_y < end_y)
-	// 		my_mlx_pixel_put(image, cur_y, pos_x, color); // Cor da barra
-	// 	else
-	// 		my_mlx_pixel_put(image, cur_y, pos_x, 1); // Fundo/preenchimento
-	// 	cur_y++;
-	// }
 }
 
 void	draw_rectangle_to_image(t_image *image, int start[2], int end[2], int color)
