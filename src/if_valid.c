@@ -34,24 +34,20 @@ void	free_map(char **map, int ret)
 	exit(ret);
 }
 
-int	is_protected(char **map, int y, int x)
+int	is_protected(char **map, int j, int i)
 {
 	//above
-	if (y == 0 || ft_strlen(map[y - 1]) - 1 <= (size_t)x
-		|| map[y - 1][x] == 32)
+	if (j == 0 || map[j - 1][i] == 32)
 		return (0);
 	//below
-	if (y == data_()->matrix_height - 1
-		|| ft_strlen(map[y + 1]) - 1 <= (size_t)x
-		|| map[y + 1][x] == 32)
+	if (j == data_()->matrix_height - 1 || map[j + 1][i] == 32)
 		return (0);
 	//left
-	if (x == 0 || map[y][x - 1] == 32)
+	if (i == 0 || map[j][i - 1] == 32)
 		return (0);
 	//right
-	if (x == data_()->matrix_width - 1 || map[y][x + 1] == 32
-		|| map[y][x + 1] == '\n')
-			return (0);
+	if (i == data_()->matrix_width - 1 || map[j][i + 1] == 32)
+		return (0);
 	return (1);
 }
 
@@ -61,15 +57,15 @@ void	check_symbols(char **map)
 	int	j;
 	int	c;
 
-	i = 0;
-	while (i < data_()->matrix_height)
+	j = 0;
+	while (j < data_()->matrix_height)
 	{
-		j = 0;
-		if (map[i][0] == '\n')
+		i = 0;
+		if (map[j][0] == '\n')
 			exitmap(map, 1, "Error\nGap in map\n");
-		while (map[i][j])
+		while (map[j][i])
 		{
-			c = map[i][j];
+			c = map[j][i];
 			// if (!map[i][j + 1] && c != '\n')
 			// 	exitmap(map, 1, "Error\nNo new line\n");
 			if (!(c == 32 || c == 10 || c == '0' || c == '1'
@@ -78,12 +74,16 @@ void	check_symbols(char **map)
 			//just check spaces and player for protection
 			if (c != 32 && c != '1' && c != 10)
 			{
-				if (!(is_protected(map, i, j)))
+
+				if (!(is_protected(map, j, i)))
+				{
+					printf("i: %d j: %d %c\n", j, i, map[j][i]);
 					exitmap(map, 1, "Error\nNot Protected\n");
+				}
 			}
-			j++;
+			i++;
 		}
-		i++;
+		j++;
 	}
 }
 
@@ -121,4 +121,5 @@ void	check_player(char **map, t_player *player)
 	}
 	if (player_n != 1)
 		exitmap(map, 0, "Error\nMultiple Players\n");
+	//DOUBLE CHECK THIS EXITMAP, PROBABLY LEAKS
 }

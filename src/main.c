@@ -22,6 +22,7 @@ int	main(int argc, char *argv[])
 		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
 		return (1);
 	}
-	open_file(argv[1]);
+	map_constructor(argv[1]);
+	//open_file(argv[1]);
 	game_init();
 }

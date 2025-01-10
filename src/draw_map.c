@@ -50,6 +50,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 
 	i = (int)pos_x;
 	j = (int)pos_y;
+	//printf("VERIFING COLLISION WITH [%d][%d]\n", j, i);
 	if (float_equal((float)i, pos_x) && i != 0 && ((angle > M_PI / 2)
 		&& (angle < 3 * M_PI / 2)))
 		i--;
@@ -100,8 +101,9 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle, fl
 	{
 		y = m * new_x + n;
 		//printf("VER: %f %f\n", new_x, y);
-		if (y < 0 || y > (data->matrix_height * BLOCK_SIZE))
+		if (y < 0 || y > ((data->matrix_height) * BLOCK_SIZE) || new_x < 0 || new_x > ((data->matrix_width - 1) * BLOCK_SIZE))
 			return (-1);
+		//printf("vertical\n");
 		if (collision(data->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle, coords_ver))
 			break ;
 		new_x += interval;
@@ -131,8 +133,9 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, 
 		//y = m * new_x + n;
 		//printf("HOR: %f %f\n", x, new_y);
 		//WONT WORK WITH IRREGULAR-END MAPS
-		if (x < 0 || x > (data->matrix_width * BLOCK_SIZE))
+		if (x < 0 || x > ((data->matrix_width) * BLOCK_SIZE) || new_y < 0 || new_y > ((data->matrix_height - 1) * BLOCK_SIZE))
 			return (-1);
+		//printf("horizontal, height: %d\n", data->matrix_height);
 		if (collision(data->map, x / BLOCK_SIZE, new_y / BLOCK_SIZE, angle, coords_hor))
 			break ;
 		new_y += interval;

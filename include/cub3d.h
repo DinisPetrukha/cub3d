@@ -110,9 +110,14 @@ typedef struct s_data {
 char	*my_ft_strjoin(char const *s1, char const *s2);
 
 // OPEN_FILE
-int		open_file(char *path);
-char	**read_map(int fd);
+//int		open_file(char *path);
+//char	**read_map(int fd);
 void	free_mat(char **mat);
+void	input_file(t_data *data, char *file);
+void	map_dimensions(t_data *data, int fd);
+void	name_check(char *name);
+void	init_map(t_data *data, char *file, int start_map);
+void	map_constructor(char *file);
 
 //FUNCTIONS_UTILS
 void	init_keys(t_data *data);
