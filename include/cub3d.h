@@ -163,6 +163,8 @@ unsigned int	my_mlx_pixel_get(t_image *data, int x, int y);
 //IS_VALID
 void	exitmap(char **map, int ret, char *msg);
 void	free_map(char **map, int ret);
+int	is_protected(char **map, int j, int i);
+void	optimise_map(t_data *data, char **map);
 void	check_symbols(char **map);
 void	check_player(char **map, t_player *player);
 

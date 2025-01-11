@@ -153,13 +153,35 @@ void	path_and_color(int fd)
 	}
 }*/
 
+int	add_texture(int value)
+{
+	printf("ADD_TEXTURE VALUE: %d\n", value);
+	return (1);
+	//error
+	//return -10
+}
+
+int	add_color(int value)
+{
+	printf("ADD_COLOR VALUE: %d\n", value);
+	return (1);
+	//error
+	//return -10
+}
+
+
 // Distribuitor
 void	input_file(t_data *data, char *file)
 {
 	int		fd;
-	//char	*line;
+	int		step;
+	char	*line;
 	int	start_map;
+	int	line_nbr;
 
+	step = 1;
+	start_map = -1;
+	line_nbr = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
@@ -167,47 +189,63 @@ void	input_file(t_data *data, char *file)
 		exit(1);
 	}
 	//check for NO, SO, WE, EA, C, F first and then check map
-	/*while (1)
+	while (step > 0)
 	{
 		line = get_next_line(fd);
+		printf("STEP: %d READ: %s\n", step, line);
 		if (!line)
-		{
-			//check if everything is loaded
 			break;
-		}
-		if (line[0] != '\n')
+		if (line[0] != '\n' && !ft_strncmp(line, "NO", 2) && step == 1)
 		{
-			start_map++;
-			if (!ft_strncmp(line, "NO", 3))
-			{
-				//funcao da textura
-				//nela verificar se ha uma textura ja loaded
-				//caso sim, sair com erro
-				printf("Textura norte...\n");
-			}
-			else if (!ft_strncmp(line, "SO", 3))
-			{
-				//a textura North da deve estar loaded quando
-				//lermos esta
-				printf("Textura sul...\n");
-			}
-			else if (!ft_strncmp(line, "WE", 3))
-				printf("Textura oeste...\n");
-			else if (!ft_strncmp(line, "EA", 3))
-				printf("Textura este...\n");
-			else if (!ft_strncmp(line, "C", 2))
-				printf("Cor ceu...\n");
-			else if (!ft_strncmp(line, "F", 2))
-				printf("Cor chao...\n");
-			else
-			{
-			}
+			//para cada:
+			//add_texture devolve 1 em caso de sucesso e -100 
+			//funcao da textura
+			printf("Textura norte...\n");
+			step += add_texture(1);
 		}
-	}*/
-	//DEFINE WHERES MAP STARTS\n
-	start_map = 0;
-	map_dimensions(data, fd);
-	close(fd);
+		else if (line[0] != '\n' && !ft_strncmp(line, "SO", 2) && step == 2)
+		{
+			printf("Textura sul...\n");
+			step += add_texture(2);
+		}
+		else if (line[0] != '\n' && !ft_strncmp(line, "WE", 2) && step == 3)
+		{
+			printf("Textura oeste...\n");
+			step += add_texture(3);
+		}
+		else if (line[0] != '\n' && !ft_strncmp(line, "EA", 2) && step == 4)
+		{
+			printf("Textura este...\n");
+			step += add_texture(4);
+		}
+		else if (line[0] != '\n' && !ft_strncmp(line, "C", 1) && step == 5)
+		{
+			printf("Cor ceu...\n");
+			step += add_color(1);
+
+		}
+		else if (line[0] != '\n' && !ft_strncmp(line, "F", 1) && step == 6)
+		{
+			printf("Cor chao...\n");
+			step += add_color(1);
+		}
+		else if (line[0] != '\n' && step == 7)
+		{
+			if (start_map == -1)
+				start_map = line_nbr;
+			if (ft_strlen(line) > (size_t)data->matrix_width)
+				data->matrix_width = ft_strlen(line) - 1;
+			data->matrix_height++;
+		}
+		line_nbr++;
+	}
+	if (step != 7)
+	{
+		printf("ERROR: NOT EVERY STEP OF THE MAP IS COMPLETE\n");
+		//CANT BE EXIT, NEED TO FREE TEXTURE PATH
+		exit(0);
+
+	}
 	if (data->matrix_height < 3)
 	{
 		write(2, "Error\nMap is too low\n", 21);
@@ -220,36 +258,9 @@ void	input_file(t_data *data, char *file)
 		//CANT BE EXIT, NEED TO FREE TEXTURE PATH
 		exit(0);
 	}
+	close(fd);
+	printf("START MAP: %d\n", start_map);
 	init_map(data, file, start_map);
-}
-
-void	map_dimensions(t_data *data, int fd)
-{
-	int	i;
-	char	*line;
-
-	i = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		printf("GETLINE: %s | height: %d\n", line, i);
-		if (!line)
-			break;
-		if (line[0] == '\n') //a nao ser que seja no final?
-		{
-			write(2, "Error\nMap divided with empty line\n", 34);
-			close(fd);
-			free(line);
-			//CANT BE EXIT, NEED TO FREE TEXTURE PATH
-			exit(0);
-		}
-		if (ft_strlen(line) > (size_t)data->matrix_width)
-			data->matrix_width = ft_strlen(line) - 1;
-		i++;
-		free(line);
-	}
-	data->matrix_height = i;
-	return ;
 }
 
 void	name_check(char *name)
@@ -265,19 +276,6 @@ void	name_check(char *name)
 	{
 		write(2, "Error\nWrong name\n", 17);
 		exit (0);
-	}
-}
-
-void	fill_spaces(t_data *data, char *line)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->matrix_width)
-	{
-		if (line[i] == 0 || line[i] == 32)
-			line[i] = '1';
-		i++;
 	}
 }
 
@@ -313,7 +311,7 @@ void	init_map(t_data *data, char *file, int start_map)
 		line = get_next_line(fd);
 		data->map[i] = (char *)ft_calloc((data->matrix_width), sizeof(char *));
 		ft_strlcpy(data->map[i], line, ft_strlen(line));
-		fill_spaces(data, data->map[i]);
+		//fill_spaces(data, data->map[i]);
 		free(line);
 		i++;
 	}
@@ -331,6 +329,7 @@ void	map_constructor(char *file)
 	//map_count_row(player, file);
 	//init_map(player, file);
 	check_symbols(data_()->map);
+	optimise_map(data_(), data_()->map);
 	init_data(data_());
 	//free(data_()->player);
 	//check_player(data_()->map, data_()->player);

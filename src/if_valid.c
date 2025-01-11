@@ -51,6 +51,25 @@ int	is_protected(char **map, int j, int i)
 	return (1);
 }
 
+void	optimise_map(t_data *data, char **map)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (j < data->matrix_height)
+	{
+		i = 0;
+		while (i < data->matrix_width)
+		{
+			if (map[j][i] == 0 || map[j][i] == 32)
+				map[j][i] = '1';
+			i++;
+		}
+		j++;
+	}
+}
+
 void	check_symbols(char **map)
 {
 	int	i;
@@ -61,13 +80,15 @@ void	check_symbols(char **map)
 	while (j < data_()->matrix_height)
 	{
 		i = 0;
-		if (map[j][0] == '\n')
+		//printf("MAP[%d][0]: %d\n", j, map[j][0]);
+		//if (map[j][0] == '\n')
+		if (!map[j][0])
 			exitmap(map, 1, "Error\nGap in map\n");
 		while (map[j][i])
 		{
 			c = map[j][i];
-			// if (!map[i][j + 1] && c != '\n')
-			// 	exitmap(map, 1, "Error\nNo new line\n");
+			//if (!map[i][j + 1] && c != '\n')
+			//	exitmap(map, 1, "Error\nNo new line\n");
 			if (!(c == 32 || c == 10 || c == '0' || c == '1'
 				|| c == 'S' || c == 'W' || c == 'N' || c == 'E'))
 				exitmap(map, 1, "Error\nWrong letter\n");
