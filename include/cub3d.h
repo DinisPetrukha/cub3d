@@ -49,6 +49,8 @@
 # include <stdbool.h>
 # include <time.h>
 
+typedef unsigned char byte;
+
 typedef enum e_type
 {
 	WALL_,
@@ -95,8 +97,8 @@ typedef struct s_data {
 	int			matrix_width;
 	int			matrix_height;
 	int			dif_timer;
-	int		ceiling_textured;
-	int		floor_textured;
+	int		ceiling_texture;
+	int		floor_texture;
 //	char		*textures; [0] = N [1] = E [2] = S [3] = W
 	t_binds		*key;
 	t_image		textures[NUMBER_OF_TEXTURES];

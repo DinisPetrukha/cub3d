@@ -161,9 +161,94 @@ int	add_texture(int value)
 	//return -10
 }
 
-int	add_color(int value)
+int	encode_rgb(byte red, byte green, byte blue)
 {
+	return (red << 16 | green << 8 | blue);
+}
+
+int	ft_coloratoi(const char *nptr)
+{
+	char	*nbr;
+	int		i;
+	int		res;
+	int		separator;
+
+	nbr = (char *)nptr;
+	i = 0;
+	res = 0;
+	separator = 0;
+	while (((nbr[i] >= 9) && (nbr[i] <= 13)) || nbr[i] == 32)
+		i++;
+	if (!nbr[i])
+		return (-1);
+	while (nbr[i])
+	{
+		if (nbr[i] >= 48 && nbr[i] <= 57)
+			res = res * 10 + nbr[i] - 48;
+		else if (nbr[i] == ',' || nbr[i] == '\n')
+		{
+			separator++;
+			break;
+		}
+		else
+			return (-1);
+		i++;
+	}
+	if (!i && separator)
+		return (-1);
+	return (res);
+}
+
+int	add_color(t_data *data, char *line, int value)
+{
+	int	i;
+	int	j;
+	int	colors[3];
+
 	printf("ADD_COLOR VALUE: %d\n", value);
+	if (ft_strlen(line) < 8 || ft_strlen(line) > 14)
+	{
+		printf("WRONG INPUT OF COLORS\n");
+		return(-10);
+	}
+	colors[0] = 0;
+	colors[1] = 0;
+	colors[2] = 0;
+	i = 0;
+	j = 2;
+	while (line[j] && i < 3)
+	{
+		printf("J:::::%d\n", j);
+		colors[i] = ft_coloratoi(&line[j]);
+		if (colors[i] < 0 || colors[i] > 255)
+		{
+			printf("CAPTURED BAD NUMBERS\n");
+			return (-10);
+		}
+		printf("COR %d = %d\n", i, colors[i]);
+		//go to next number (skip the values we just read)
+		while (line[j])
+		{ 
+			if (line[j] < '0' || line[j] > '9')
+			{
+				//printf("LETTER SNEAKED IN COLOR INPUT: %d %d\n", j, line[j]);
+				if (line[j] == ',' || line[j] == '\n')
+				{
+					j++;
+					break ;
+				}
+				return (-10);
+			}
+			j++;
+		}
+		i++;
+	}
+	if (value == 1)
+		data->ceiling_texture = encode_rgb(colors[0], colors[1], colors[2]);
+	if (value == 2)
+		data->floor_texture = encode_rgb(colors[0], colors[1], colors[2]);
+	printf("ceiling_texture = %d\n", data->ceiling_texture);
+	printf("floor_texture = %d\n", data->floor_texture);
 	return (1);
 	//error
 	//return -10
@@ -221,13 +306,13 @@ void	input_file(t_data *data, char *file)
 		else if (line[0] != '\n' && !ft_strncmp(line, "C", 1) && step == 5)
 		{
 			printf("Cor ceu...\n");
-			step += add_color(1);
+			step += add_color(data, line, 1);
 
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "F", 1) && step == 6)
 		{
 			printf("Cor chao...\n");
-			step += add_color(1);
+			step += add_color(data, line, 2);
 		}
 		else if (line[0] != '\n' && step == 7)
 		{
@@ -238,6 +323,7 @@ void	input_file(t_data *data, char *file)
 			data->matrix_height++;
 		}
 		line_nbr++;
+		free(line);
 	}
 	if (step != 7)
 	{
@@ -324,6 +410,8 @@ void	map_constructor(char *file)
 	name_check(file);
 	//texture_check
 	//colour_check
+	data_()->ceiling_texture = 0;
+	data_()->floor_texture = 0;
 	input_file(data_(), file);
 	print_map();
 	//map_count_row(player, file);

@@ -388,12 +388,12 @@ void	empty_bar(t_image *image, int pos_x)
 	pos_y = 0;
 	while(pos_y < WINDOW_HEIGHT / 2)
 	{
-		my_mlx_pixel_put(image, pos_y, pos_x, 5078158);
+		my_mlx_pixel_put(image, pos_y, pos_x, data_()->ceiling_texture);
 		pos_y++;
 	}
 	while(pos_y < WINDOW_HEIGHT)
 	{
-		my_mlx_pixel_put(image, pos_y, pos_x, 8473150);
+		my_mlx_pixel_put(image, pos_y, pos_x, data_()->floor_texture);
 		pos_y++;
 	}
 }
@@ -431,9 +431,9 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 		else
 		{
 			if (cur_y < WINDOW_HEIGHT / 2)
-				my_mlx_pixel_put(image, cur_y, pos_x, 5078158);
+				my_mlx_pixel_put(image, cur_y, pos_x, data_()->ceiling_texture);
 			else
-				my_mlx_pixel_put(image, cur_y, pos_x, 8473150);
+				my_mlx_pixel_put(image, cur_y, pos_x, data_()->floor_texture);
 			//printf("LIMPADOR\n\n");
 		}
 		cur_y++;
