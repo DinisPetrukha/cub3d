@@ -55,4 +55,7 @@ re: fclean all
 2:
 	@make && ./$(NAME) map2.cub
 
+4:
+	@make && ./$(NAME) map4.cub
+
 .PHONY: all clean fclean re

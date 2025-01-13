@@ -16,7 +16,7 @@
 # define PLAYER_SPEED 0.5
 # define ROTATION_SPEED 0.007
 
-# define NUMBER_OF_TEXTURES 1
+# define NUMBER_OF_TEXTURES 4
 # define TEXTURE_SIZE 64
 
 # define BLOCK_SIZE_3D 64.0f
@@ -66,6 +66,7 @@ typedef struct s_image
 	int				endian;
 	int				width;
 	int				height;
+	char			*path;
 	unsigned int	pixels[TEXTURE_SIZE][TEXTURE_SIZE];
 }	t_image;
 
@@ -97,8 +98,8 @@ typedef struct s_data {
 	int			matrix_width;
 	int			matrix_height;
 	int			dif_timer;
-	int		ceiling_texture;
-	int		floor_texture;
+	int			ceiling_texture;
+	int			floor_texture;
 //	char		*textures; [0] = N [1] = E [2] = S [3] = W
 	t_binds		*key;
 	t_image		textures[NUMBER_OF_TEXTURES];

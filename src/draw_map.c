@@ -59,6 +59,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 	{
+		// printf("Colision: %f %f\n", pos_y, pos_x);
 		coords_arr[0] = pos_y;
 		coords_arr[1] = pos_x;
 		coords_arr[2] = map[j][i];
@@ -384,7 +385,7 @@ void	draw_half(t_image *image, int ccolor, int fcolor)
 void	empty_bar(t_image *image, int pos_x)
 {
 	int	pos_y;
-	
+
 	pos_y = 0;
 	while(pos_y < WINDOW_HEIGHT / 2)
 	{
@@ -563,7 +564,7 @@ int	loop_handler(void *param)
 	t_data *data = (t_data *)param;
 	// if ((data->dif_timer != instant.tv_nsec / 100000000) && (instant.tv_nsec / 100000000 % 1 == 0))
 	// {
-	printf("PLAYER: ORIENT: %f\n", data->player->orient);
+	// printf("PLAYER: ORIENT: %f\n", data->player->orient);
 		apply_changes(data);
 		//draw_3d(data, data->player, data->frame);
 		//draw_half(data->frame, 13158350, 15329736);
