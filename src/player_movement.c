@@ -98,12 +98,19 @@ int	is_wall_player(t_data *data, float next_y, float next_x)
 
 void apply_changes(t_data *data)
 {
-	float	pos_y;
-	float	pos_x;
+	float pos_y;
+	float pos_x;
+	float strafe_y;
+	float strafe_x;
 
 	t_player *player = data->player;
 	pos_y = (PLAYER_SPEED * sin(player->orient));
 	pos_x = (PLAYER_SPEED * cos(player->orient));
+
+	// Calculando os deslocamentos laterais (strafe)
+	strafe_y = (PLAYER_SPEED * cos(player->orient));
+	strafe_x = -(PLAYER_SPEED * sin(player->orient));
+
 	// Movimento para frente
 	if (data->key->move_up)
 	{
@@ -121,13 +128,34 @@ void apply_changes(t_data *data)
 		if (!is_wall_player(data, player->y, player->x + pos_x))
 			player->x += pos_x;
 	}
+
+	// Movimento para a esquerda (strafe esquerdo)
+	if (data->key->move_left)
+	{
+		if (!is_wall_player(data, player->y - strafe_y, player->x))
+			player->y -= strafe_y;
+		if (!is_wall_player(data, player->y, player->x - strafe_x))
+			player->x -= strafe_x;
+	}
+
+	// Movimento para a direita (strafe direito)
+	if (data->key->move_right)
+	{
+		if (!is_wall_player(data, player->y + strafe_y, player->x))
+			player->y += strafe_y;
+		if (!is_wall_player(data, player->y, player->x + strafe_x))
+			player->x += strafe_x;
+	}
+
 	// Rotação da câmera
-	if (data->key->camera_left) {
+	if (data->key->camera_left)
+	{
 		player->orient -= ROTATION_SPEED;
 		if (player->orient < 0)
 			player->orient += 2 * M_PI;
 	}
-	if (data->key->camera_right) {
+	if (data->key->camera_right)
+	{
 		player->orient += ROTATION_SPEED;
 		if (player->orient >= 2 * M_PI)
 			player->orient -= 2 * M_PI;

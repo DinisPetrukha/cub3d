@@ -303,7 +303,7 @@ void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *
 
 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
 	center[1] = player->x + (PLAYER_SIZE_V1 / 2);
-	line_len = 500;
+	line_len = 305;
 	i = 0;
 	hit_wall_flag = 0;
 	while (i < line_len && hit_wall_flag == 0)
@@ -427,7 +427,7 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 		if (cur_y >= start_y && cur_y < end_y)
 		{
 			texture_y = (int)(((cur_y - start_y) / (float)(end_y - start_y)) * 64);
-			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_].pixels[texture_y][texture_x]);
+			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_][0].pixels[texture_y][texture_x]);
 		}
 		else
 		{

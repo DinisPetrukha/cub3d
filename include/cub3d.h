@@ -7,8 +7,8 @@
 
 # define WINDOW_HEIGHT	1000
 # define WINDOW_WIDTH	1000
-# define BLOCK_SIZE 32
-# define PLAYER_SIZE_V1 12
+# define BLOCK_SIZE 30
+# define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5
 # define FOV 1.0472 // 60 degrees in raians
 # define FOV_DEEPNESS 300
@@ -16,7 +16,7 @@
 # define PLAYER_SPEED 0.5
 # define ROTATION_SPEED 0.007
 
-# define NUMBER_OF_TEXTURES 4
+# define NUMBER_OF_TEXTURES 1
 # define TEXTURE_SIZE 64
 
 # define BLOCK_SIZE_3D 64.0f
@@ -102,7 +102,7 @@ typedef struct s_data {
 	int			floor_texture;
 //	char		*textures; [0] = N [1] = E [2] = S [3] = W
 	t_binds		*key;
-	t_image		textures[NUMBER_OF_TEXTURES];
+	t_image		textures[NUMBER_OF_TEXTURES][4];
 	t_image		*frame;
 	t_image		*black_screen;
 	t_player	*player;

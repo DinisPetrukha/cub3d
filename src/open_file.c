@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/14 10:58:42 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:16:51 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,25 +311,25 @@ void	input_file(t_data *data, char *file)
 			//add_texture devolve 1 em caso de sucesso e -100
 			//funcao da textura
 			printf("Textura norte...\n");
-			step += add_texture(line, &data->textures[0].path);
+			step += add_texture(line, &data->textures[WALL_][0].path);
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "SO ", 3) && step == 2)
 		{
 			printf("Textura sul...\n");
 			// step += add_texture(2);
-			step += add_texture(line, &data->textures[1].path);
+			step += add_texture(line, &data->textures[WALL_][1].path);
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "WE ", 3) && step == 3)
 		{
 			printf("Textura oeste...\n");
 			// step += add_texture(3);
-			step += add_texture(line, &data->textures[2].path);
+			step += add_texture(line, &data->textures[WALL_][2].path);
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "EA ", 3) && step == 4)
 		{
 			printf("Textura este...\n");
 			// step += add_texture(4);
-			step += add_texture(line, &data->textures[3].path);
+			step += add_texture(line, &data->textures[WALL_][4].path);
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "C", 1) && step == 5)
 		{

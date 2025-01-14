@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/12/30 15:59:52 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:18:34 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	load_image(char *path, t_image *img, void *mlx_ptr)
 
 void	load_all_images(t_data *data)
 {
-	load_image("texture/red_brick.xpm",
-		&data->textures[WALL_], data->mlx_ptr);
-	copy_static_array(&data->textures[WALL_]);
+	load_image(data->textures[WALL_][0].path,
+		&data->textures[WALL_][0], data->mlx_ptr);
+	copy_static_array(&data->textures[WALL_][0]);
 }
 
 void print_texture(unsigned texture[TEXTURE_SIZE][TEXTURE_SIZE]) {
