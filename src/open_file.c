@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/13 21:31:22 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/14 10:58:42 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,23 +161,26 @@ int	add_texture(char *line, char **mem)
 
 	i = 2;
 	printf("%s\n", line);
-	if (line[i] && line[i] != ' ')
+	while (line[i] && ft_strchr(" \n", line[i]))
+		i++;
+	if (!line[i])
 	{
-		printf("INVALID PATH TEXTURE");
+		printf("INVALID PATH TEXTURE INPUT\n");
 		return (-10);
 	}
-	while (line[i] && line[i] == ' ')
-		i++;
 	len = i;
-	while (line[len] && ft_isascii(line[len]))
+	while (line[len] && ft_isascii(line[len]) && !ft_strchr(" \n", line[len]))
 		len++;
 	line[len] = '\0';
 	path = ft_strdup(line + i);
-	if (!access(path, R_OK))
+	i = open(path, O_RDONLY);
+	if (i < 0)
 	{
 		printf("CAN'T ACCESS TEXTURE PATH FILE:\n%s\n", path);
+		free(path);
 		return (-10);
 	}
+	close(i);
 	printf("Done!\n%s\n", path);
 	*mem = path;
 	return (1);
@@ -302,7 +305,7 @@ void	input_file(t_data *data, char *file)
 		printf("STEP: %d READ: %s\n", step, line);
 		if (!line)
 			break;
-		if (line[0] != '\n' && !ft_strncmp(line, "NO", 2) && step == 1)
+		if (line[0] != '\n' && !ft_strncmp(line, "NO ", 3) && step == 1)
 		{
 			//para cada:
 			//add_texture devolve 1 em caso de sucesso e -100
@@ -310,19 +313,19 @@ void	input_file(t_data *data, char *file)
 			printf("Textura norte...\n");
 			step += add_texture(line, &data->textures[0].path);
 		}
-		else if (line[0] != '\n' && !ft_strncmp(line, "SO", 2) && step == 2)
+		else if (line[0] != '\n' && !ft_strncmp(line, "SO ", 3) && step == 2)
 		{
 			printf("Textura sul...\n");
 			// step += add_texture(2);
 			step += add_texture(line, &data->textures[1].path);
 		}
-		else if (line[0] != '\n' && !ft_strncmp(line, "WE", 2) && step == 3)
+		else if (line[0] != '\n' && !ft_strncmp(line, "WE ", 3) && step == 3)
 		{
 			printf("Textura oeste...\n");
 			// step += add_texture(3);
 			step += add_texture(line, &data->textures[2].path);
 		}
-		else if (line[0] != '\n' && !ft_strncmp(line, "EA", 2) && step == 4)
+		else if (line[0] != '\n' && !ft_strncmp(line, "EA ", 3) && step == 4)
 		{
 			printf("Textura este...\n");
 			// step += add_texture(4);
