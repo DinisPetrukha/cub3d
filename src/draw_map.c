@@ -30,6 +30,16 @@ unsigned int	my_mlx_pixel_get(t_image *data, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
+int	has_decimal(float num)
+{
+	int	int_num;
+
+	int_num = (int)num;
+	if ((float)int_num == num)
+		return (0);
+	return (1);
+}
+
 int	float_equal(float a, float b)
 {
 	float	difference;
@@ -42,8 +52,24 @@ int	float_equal(float a, float b)
 	return (0);
 }
 
+int	return_wall_side(float pos_x, float angle)
+{
+	int	vertical_collision;
+
+	vertical_collision = 0;
+	if (!has_decimal(pos_x))
+		vertical_collision = 1;
+	if (vertical_collision && angle < M_PI)
+		return (4);
+	else if (vertical_collision && angle > M_PI)
+		return (3);
+	else if (!vertical_collision && (angle < M_PI / 2 || angle > 3 * M_PI / 2))
+		return (2);
+	return (1);
+}
+
 //VE A COLISAO DEPENDENDO DO LADO QUE O RAIO VEM
-int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_arr[3])
+int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_arr[4])
 {
 	int	i;
 	int	j;
@@ -59,10 +85,12 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 	{
-		// printf("Colision: %f %f\n", pos_y, pos_x);
+		//printf("Colision: %f %f\n", pos_y, pos_x);
 		coords_arr[0] = pos_y;
 		coords_arr[1] = pos_x;
 		coords_arr[2] = map[j][i];
+		coords_arr[3] = return_wall_side(pos_x, angle);
+		// printf("HIT WALL SIDE:%f\n", coords_arr[3]);
 		return (1);
 	}
 	return (0);
@@ -84,7 +112,7 @@ float	distance(float x1, float y1, float x2, float y2)
 }
 
 //TESTE DE DISTANCIA PARA RAIO VERTICAL
-int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[3])
+int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[4])
 {
 	float	center[2];
 	float	new_x;
@@ -114,7 +142,7 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle, fl
 }
 
 //TESTE DE DISTANCIA PARA RAIO HORIZONTAL
-int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[3])
+int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[4])
 {
 	float	center[2];
 	float	x;
@@ -145,14 +173,14 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, 
 }
 
 //DEVOLVE DISTANCIA DE UM RAIO
-float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[3])
+float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[4])
 {
 	float	center[2];
 	float	increment[2];
 	float	rays[2];
 	//VALORES DA RETA-RAIO
-	float	coords_hor[3];
-	float	coords_ver[3];
+	float	coords_hor[4];
+	float	coords_ver[4];
 	float	m;
 	float	n;
 
@@ -234,7 +262,7 @@ void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, 
 	int		i;
 	int		hit_wall_flag;
 	float	distant;
-	float	collision_cords[3];
+	float	collision_cords[4];
 
 
 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
@@ -339,8 +367,6 @@ void	draw_player(t_player *player)
 {
 	if (data_()->first_render == 0)
 	{
-		//player->y = ((player->y * BLOCK_SIZE) + (BLOCK_SIZE / 2)) - (PLAYER_SIZE_V1 / 2);
-		//player->x = ((player->x *BLOCK_SIZE) + (BLOCK_SIZE / 2)) - (PLAYER_SIZE_V1 / 2);
 		player->y = (player->y * BLOCK_SIZE);
 		player->x = (player->x * BLOCK_SIZE);
 
@@ -400,7 +426,7 @@ void	empty_bar(t_image *image, int pos_x)
 }
 
 
-void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3])
+void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[4])
 {
 	float	bar_size;
 	int		cur_y;
@@ -435,7 +461,6 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 				my_mlx_pixel_put(image, cur_y, pos_x, data_()->ceiling_texture);
 			else
 				my_mlx_pixel_put(image, cur_y, pos_x, data_()->floor_texture);
-			//printf("LIMPADOR\n\n");
 		}
 		cur_y++;
 	}

@@ -152,7 +152,7 @@ void	player_input(t_binds *key, int keycode, bool pressed);
 
 void	draw_half(t_image *image, int ccolor, int fcolor);
 void	empty_bar(t_image *image, int pos_x);
-void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[3]);
+void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[4]);
 
 int		loop_handler(void *param);
 void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num_rays, int color, t_image *image);
