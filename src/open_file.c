@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/14 11:16:51 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:56:19 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ void	input_file(t_data *data, char *file)
 		{
 			printf("Textura este...\n");
 			// step += add_texture(4);
-			step += add_texture(line, &data->textures[WALL_][4].path);
+			step += add_texture(line, &data->textures[WALL_][3].path);
 		}
 		else if (line[0] != '\n' && !ft_strncmp(line, "C", 1) && step == 5)
 		{

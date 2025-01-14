@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/14 11:18:34 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/14 20:03:12 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,16 @@ void	load_all_images(t_data *data)
 {
 	load_image(data->textures[WALL_][0].path,
 		&data->textures[WALL_][0], data->mlx_ptr);
+	load_image(data->textures[WALL_][1].path,
+		&data->textures[WALL_][1], data->mlx_ptr);
+	load_image(data->textures[WALL_][2].path,
+		&data->textures[WALL_][2], data->mlx_ptr);
+	load_image(data->textures[WALL_][3].path,
+		&data->textures[WALL_][3], data->mlx_ptr);
 	copy_static_array(&data->textures[WALL_][0]);
+	copy_static_array(&data->textures[WALL_][1]);
+	copy_static_array(&data->textures[WALL_][2]);
+	copy_static_array(&data->textures[WALL_][3]);
 }
 
 void print_texture(unsigned texture[TEXTURE_SIZE][TEXTURE_SIZE]) {

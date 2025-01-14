@@ -56,16 +56,14 @@ int	return_wall_side(float pos_x, float angle)
 {
 	int	vertical_collision;
 
-	vertical_collision = 0;
-	if (!has_decimal(pos_x))
-		vertical_collision = 1;
+	vertical_collision = has_decimal(pos_x);
 	if (vertical_collision && angle < M_PI)
-		return (4);
-	else if (vertical_collision && angle > M_PI)
 		return (3);
-	else if (!vertical_collision && (angle < M_PI / 2 || angle > 3 * M_PI / 2))
+	else if (vertical_collision && angle > M_PI)
 		return (2);
-	return (1);
+	else if (!vertical_collision && (angle < M_PI / 2 || angle > 3 * M_PI / 2))
+		return (1);
+	return (0);
 }
 
 //VE A COLISAO DEPENDENDO DO LADO QUE O RAIO VEM
@@ -215,11 +213,13 @@ float	rainbow(t_data *data, t_player *player, float angle, float collision_cords
 		collision_cords[0] = coords_hor[0];
 		collision_cords[1] = coords_hor[1];
 		collision_cords[2] = coords_hor[2];
+		collision_cords[3] = coords_hor[3];
 		return (rays[0]);
 	}
 	collision_cords[0] = coords_ver[0];
 	collision_cords[1] = coords_ver[1];
 	collision_cords[2] = coords_ver[2];
+	collision_cords[3] = coords_ver[3];
 	return (rays[1]);
 }
 
@@ -453,7 +453,8 @@ void	draw_bar(t_image *image, float distant, int pos_x, int color, float collisi
 		if (cur_y >= start_y && cur_y < end_y)
 		{
 			texture_y = (int)(((cur_y - start_y) / (float)(end_y - start_y)) * 64);
-			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_][0].pixels[texture_y][texture_x]);
+			// printf("colision return texture:%f\n", collision_cords[3]);
+			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_][(int)collision_cords[3]].pixels[texture_y][texture_x]);
 		}
 		else
 		{
