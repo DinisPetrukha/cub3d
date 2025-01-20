@@ -5,11 +5,15 @@
 #  define BUFFER_SIZE 10
 # endif
 
+#define RED   "\x1B[31m"
+#define RESET "\x1B[0m"
+
 # define WINDOW_HEIGHT	1000
 # define WINDOW_WIDTH	1000
-# define BLOCK_SIZE 30
+# define BLOCK_SIZE 32
 # define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5
+//FOV CANT BE MULTIPLE OF PI. OR DISTANCE_TO_SCREEN WILL EXPLODE
 # define FOV 1.0472 // 60 degrees in raians
 # define FOV_DEEPNESS 300
 
@@ -21,7 +25,9 @@
 
 # define BLOCK_SIZE_3D 64.0f
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
-# define MAX_BAR_HEIGHT 900
+//# define MAX_BAR_HEIGHT 900
+
+#define NUM_RAYS 100
 
 # define W 119
 # define UP 65362
