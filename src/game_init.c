@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/14 20:03:12 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:18:47 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ void print_texture(unsigned texture[TEXTURE_SIZE][TEXTURE_SIZE]) {
 // Return 0 if not success
 int	game_init(void)
 {
-	t_data			*data;
+	static t_data	*data;
 	static t_image	frame;
-	static t_image	black_screen;
+	// static t_image	black_screen;
 
 	data = data_();
 	data->dif_timer = 0;
@@ -91,12 +91,8 @@ int	game_init(void)
 	// Initializing The Main Frame
 	data->frame = &frame;
 	init_image(data->frame);
-	data->black_screen = &black_screen;
-	init_image(data->black_screen);
 	load_all_images(data);
-	//print_texture(data->textures[WALL_].pixels);
 	init_keys(data);
-	// Close window when X it's Clicked
 	mlx_hook(data->window, DestroyNotify, StructureNotifyMask,
 		close_window, data);
 	// Loop The Game

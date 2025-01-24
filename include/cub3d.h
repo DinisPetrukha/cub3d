@@ -25,7 +25,6 @@
 
 # define BLOCK_SIZE_3D 64.0f
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
-//# define MAX_BAR_HEIGHT 900
 
 #define NUM_RAYS 100
 
