@@ -81,6 +81,9 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 		i--;
 	if (float_equal((float)j, pos_y) && j != 0 && ((angle > M_PI)))
 		j--;
+	//EXTRA VERIFICATION FOR THE SEGMENTATION FAULT
+	if (j < 0 || i < 0)
+		return (0);
 	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 	{
