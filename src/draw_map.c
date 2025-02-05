@@ -84,6 +84,7 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 	//EXTRA VERIFICATION FOR THE SEGMENTATION FAULT
 	if (j < 0 || i < 0)
 		return (0);
+	//printf("J: %d I: %d\n", j, i);
 	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 	{
@@ -132,7 +133,9 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle, fl
 	{
 		y = m * new_x + n;
 		//printf("VER: %f %f\n", new_x, y);
-		if (y < 0 || y > ((data->matrix_height) * BLOCK_SIZE) || new_x < 0 || new_x > ((data->matrix_width - 1) * BLOCK_SIZE))
+		//printf("matrix->height: %d", data->matrix_height);
+		//ADDED data->matrix_height - 1 because it went over the heights. SEGMENTATION FAULT
+		if (y < 0 || y > ((data->matrix_height - 1) * BLOCK_SIZE) || new_x < 0 || new_x > ((data->matrix_width - 1) * BLOCK_SIZE))
 			return (-1);
 		//printf("vertical\n");
 		if (collision(data->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle, coords_ver))
