@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: dpetrukh <dpetrukh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/24 16:18:47 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:48:49 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ int	game_init(void)
 {
 	static t_data	*data;
 	static t_image	frame;
-	// static t_image	black_screen;
-
 	data = data_();
 	data->dif_timer = 0;
 	// Initializing The Mlx

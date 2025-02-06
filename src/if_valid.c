@@ -15,10 +15,11 @@
 void	exitmap(char **map, int ret, char *msg)
 {
 	ft_putstr_fd(msg, 2);
-	free_map(map, ret);
+	free_map(map);
+	exit(ret);
 }
 
-void	free_map(char **map, int ret)
+void	free_map(char **map)
 {
 	int	i;
 
@@ -31,7 +32,6 @@ void	free_map(char **map, int ret)
 		i++;
 	}
 	free(map);
-	exit(ret);
 }
 
 int	is_protected(char **map, int j, int i)

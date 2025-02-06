@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: dpetrukh <dpetrukh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 08:54:47 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/11/29 16:49:53 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:21:28 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	map_constructor(argv[1]);
+	// close_window(data_());
 	//open_file(argv[1]);
 	game_init();
 }

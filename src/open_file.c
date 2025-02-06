@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: dpetrukh <dpetrukh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/01/24 15:15:38 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:08:33 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ int	add_texture(char *line, char **mem)
 	char	*path;
 
 	i = 2;
-	printf("%s\n", line);
 	while (line[i] && ft_strchr(" \n", line[i]))
 		i++;
 	if (!line[i])
@@ -173,6 +172,7 @@ int	add_texture(char *line, char **mem)
 		len++;
 	line[len] = '\0';
 	path = ft_strdup(line + i);
+	printf("%s\n", path);
 	i = open(path, O_RDONLY);
 	if (i < 0)
 	{
@@ -181,7 +181,6 @@ int	add_texture(char *line, char **mem)
 		return (-10);
 	}
 	close(i);
-	printf("Done!\n%s\n", path);
 	*mem = path;
 	return (1);
 }
@@ -357,6 +356,7 @@ void	input_file(t_data *data, char *file)
 	{
 		printf("ERROR: NOT EVERY STEP OF THE MAP IS COMPLETE\n");
 		//CANT BE EXIT, NEED TO FREE TEXTURE PATH
+		close_window(data);
 		exit(0);
 
 	}
@@ -364,11 +364,13 @@ void	input_file(t_data *data, char *file)
 	{
 		write(2, "Error\nMap is too low\n", 21);
 		//CANT BE EXIT, NEED TO FREE TEXTURE PATH
+		close_window(data);
 		exit(0);
 	}
 	if (data->matrix_width < 3)
 	{
 		write(2, "Error\nMap not wide enought or it doesnt exist\n", 47);
+		close_window(data);
 		//CANT BE EXIT, NEED TO FREE TEXTURE PATH
 		exit(0);
 	}

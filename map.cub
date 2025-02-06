@@ -1,7 +1,7 @@
 NO     texture/red_brick.xpm
 SO                texture/eagle.xpm
 WE texture/mossy.xpm
-EA texture/color_stone.xpm
+EA .//texture/mossy.xpm
 
 C 00,00,100
 F 50,100,0
@@ -12,4 +12,5 @@ F 50,100,0
 10W000000000001
 100000000000001
 100000000000001
-111111111111111
+11111111111111111
+  0

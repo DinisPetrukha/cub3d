@@ -26,7 +26,7 @@
 # define BLOCK_SIZE_3D 64.0f
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
 
-#define NUM_RAYS 100
+#define NUM_RAYS 1000
 
 # define W 119
 # define UP 65362
@@ -109,7 +109,6 @@ typedef struct s_data {
 	t_binds		*key;
 	t_image		textures[NUMBER_OF_TEXTURES][4];
 	t_image		*frame;
-	t_image		*black_screen;
 	t_player	*player;
 }
 	t_data;
@@ -170,7 +169,7 @@ unsigned int	my_mlx_pixel_get(t_image *data, int x, int y);
 
 //IS_VALID
 void	exitmap(char **map, int ret, char *msg);
-void	free_map(char **map, int ret);
+void	free_map(char **map);
 int	is_protected(char **map, int j, int i);
 void	optimise_map(t_data *data, char **map);
 void	check_symbols(char **map);
