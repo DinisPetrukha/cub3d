@@ -141,6 +141,7 @@ void	load_sructures(t_data *data);
 
 //CLOSE_FREE
 int		close_window(t_data *data);
+void	clean_textures(t_data *data);
 
 //PLAYER_MOVEMENT
 int		is_wall_player(t_data *data, float next_y, float next_x);

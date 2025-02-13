@@ -15,6 +15,7 @@
 void	exitmap(char **map, int ret, char *msg)
 {
 	ft_putstr_fd(msg, 2);
+	clean_textures(data_());
 	free_map(map);
 	exit(ret);
 }
@@ -37,6 +38,7 @@ void	free_map(char **map)
 int	is_protected(char **map, int j, int i)
 {
 	//above
+	//printf("j: %d i: %d: %c\n", j, i, map[j][i]);
 	if (j == 0 || map[j - 1][i] == 32)
 		return (0);
 	//below

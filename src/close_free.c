@@ -12,6 +12,36 @@
 
 #include "../include/cub3d.h"
 
+void	clean_textures(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	//NUMBER OF ELEMENTS
+	while (i < NUMBER_OF_TEXTURES)
+	{
+		j = 0;
+		while (j < 4)
+		{
+
+			if (data->textures[i][j].path)
+			{
+				free(data->textures[i][j].path);
+				data->textures[i][j].path = NULL;
+			}
+			if (data->textures[i][j].img_ptr)
+			{
+				mlx_destroy_image(data->mlx_ptr, data->textures[i][j].img_ptr);
+				data->textures[i][j].img_ptr = NULL;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+
 int	close_window(t_data *data)
 {
 	int	i;
@@ -20,7 +50,6 @@ int	close_window(t_data *data)
 
 	if (data->map)
 		free_map(data->map);
-
 	i = 0;
 	while (i < NUMBER_OF_TEXTURES)
 	{

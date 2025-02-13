@@ -177,6 +177,18 @@ int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, 
 	return (distance(center[0], center[1], x, new_y));
 }
 
+void	float_array_copy(float *dst, float *src, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+}
+
 //DEVOLVE DISTANCIA DE UM RAIO
 float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[4])
 {
@@ -208,23 +220,15 @@ float	rainbow(t_data *data, t_player *player, float angle, float collision_cords
 		return (horizontal_ray(data, 0, 0, increment[1], angle, collision_cords));
 	m = tan(angle);
 	n = center[1] - (m * center[0]);
-	//printf("PX: %f PY: %f\n", center[0], center[1]);
-	//printf("Y = %f x + %f | ANGLE: %f\n", m, n, angle);
 	rays[0] = horizontal_ray(data, m, n, increment[1], angle, coords_hor);
 	rays[1] = vertical_ray(data, m, n, increment[0], angle, coords_ver);
 	//VER QUAL E O RAIO COM MENOR DISTANCIA
 	if ((rays[0] <= rays[1] && rays[0] != -1) || rays[1] == -1)
 	{
-		collision_cords[0] = coords_hor[0];
-		collision_cords[1] = coords_hor[1];
-		collision_cords[2] = coords_hor[2];
-		collision_cords[3] = coords_hor[3];
+		float_arraycopy(collision_cords, coords_hor, 4);
 		return (rays[0]);
 	}
-	collision_cords[0] = coords_ver[0];
-	collision_cords[1] = coords_ver[1];
-	collision_cords[2] = coords_ver[2];
-	collision_cords[3] = coords_ver[3];
+	float_arraycopy(collision_cords, coords_ver, 4);
 	return (rays[1]);
 }
 
