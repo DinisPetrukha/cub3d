@@ -120,7 +120,7 @@ char	*my_ft_strjoin(char const *s1, char const *s2);
 //int		open_file(char *path);
 //char	**read_map(int fd);
 void	free_mat(char **mat);
-void	input_file(t_data *data, char *file);
+void	input_file(t_data *data, char *file, int line_nbr, int step);
 void	map_dimensions(t_data *data, int fd);
 void	name_check(char *name);
 void	init_map(t_data *data, char *file, int start_map);
@@ -157,7 +157,7 @@ void	player_input(t_binds *key, int keycode, bool pressed);
 
 void	draw_half(t_image *image, int ccolor, int fcolor);
 void	empty_bar(t_image *image, int pos_x);
-void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[4]);
+void	draw_bar(t_image *image, float bar_size, int pos_x, float collision_cords[4]);
 
 int		loop_handler(void *param);
 void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num_rays, int color, t_image *image);

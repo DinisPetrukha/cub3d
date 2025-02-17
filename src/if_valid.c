@@ -59,17 +59,22 @@ void	optimise_map(t_data *data, char **map)
 	int	j;
 
 	j = 0;
+	printf("--BEFORE--\n");
+	print_map();
+	(void) map;
 	while (j < data->matrix_height)
 	{
 		i = 0;
 		while (i < data->matrix_width)
 		{
-			if (map[j][i] == 0 || map[j][i] == 32)
-				map[j][i] = '1';
+			if (map[j][i] == 0 || map[j][i] == ' ')
+			 	map[j][i] = '1';
 			i++;
 		}
 		j++;
 	}
+	printf("--AFTER--\n");
+	print_map();
 }
 
 void	check_symbols(char **map)
@@ -82,32 +87,35 @@ void	check_symbols(char **map)
 	while (j < data_()->matrix_height)
 	{
 		i = 0;
-		//printf("MAP[%d][0]: %d\n", j, map[j][0]);
-		//if (map[j][0] == '\n')
 		if (!map[j][0])
 			exitmap(map, 1, "Error\nGap in map\n");
 		while (map[j][i])
 		{
 			c = map[j][i];
-			//if (!map[i][j + 1] && c != '\n')
-			//	exitmap(map, 1, "Error\nNo new line\n");
 			if (!(c == 32 || c == 10 || c == '0' || c == '1'
 				|| c == 'S' || c == 'W' || c == 'N' || c == 'E'))
 				exitmap(map, 1, "Error\nWrong letter\n");
-			//just check spaces and player for protection
 			if (c != 32 && c != '1' && c != 10)
 			{
-
 				if (!(is_protected(map, j, i)))
-				{
-					printf("i: %d j: %d %c\n", j, i, map[j][i]);
 					exitmap(map, 1, "Error\nNot Protected\n");
-				}
 			}
 			i++;
 		}
 		j++;
 	}
+}
+
+void	player_orient_reading(int j, int i, t_player *player, char **map)
+{
+	if (map[j][i] == 'N')
+		player->orient = 3 * M_PI / 2; // 90º
+	if (map[j][i] == 'S')
+		player->orient = M_PI / 2; // 270º
+	if (map[j][i] == 'W')
+		player->orient = M_PI; // 180º
+	if (map[j][i] == 'E')
+		player->orient = 0; // 0º
 }
 
 void	check_player(char **map, t_player *player)
@@ -123,14 +131,7 @@ void	check_player(char **map, t_player *player)
 		i = 0;
 		while (map[j][i])
 		{
-			if (map[j][i] == 'N')
-				player->orient = 3 * M_PI / 2; // 90º
-			if (map[j][i] == 'S')
-				player->orient = M_PI / 2; // 270º
-			if (map[j][i] == 'W')
-				player->orient = M_PI; // 180º
-			if (map[j][i] == 'E')
-				player->orient = 0;
+			player_orient_reading(j, i, player, map);
 			if (map[j][i] > 'A' && map[j][i] < 'Z')
 			{
 				player->y = j + 0.5;
@@ -144,5 +145,4 @@ void	check_player(char **map, t_player *player)
 	}
 	if (player_n != 1)
 		exitmap(map, 0, "Error\nMultiple Players\n");
-	//DOUBLE CHECK THIS EXITMAP, PROBABLY LEAKS
 }

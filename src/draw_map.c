@@ -75,25 +75,19 @@ int	collision(char	**map, float pos_x, float pos_y, float angle, float coords_ar
 
 	i = (int)pos_x;
 	j = (int)pos_y;
-	//printf("VERIFING COLLISION WITH [%d][%d]\n", j, i);
 	if (float_equal((float)i, pos_x) && i != 0 && ((angle > M_PI / 2)
 		&& (angle < 3 * M_PI / 2)))
 		i--;
 	if (float_equal((float)j, pos_y) && j != 0 && ((angle > M_PI)))
 		j--;
-	//EXTRA VERIFICATION FOR THE SEGMENTATION FAULT
 	if (j < 0 || i < 0)
 		return (0);
-	//printf("J: %d I: %d\n", j, i);
-	//printf("CHECK COLLISION: map[%d][%d] = %c\n", j, i, map[j][i]);
 	if (map[j][i] == '1')
 	{
-		//printf("Colision: %f %f\n", pos_y, pos_x);
 		coords_arr[0] = pos_y;
 		coords_arr[1] = pos_x;
 		coords_arr[2] = map[j][i];
 		coords_arr[3] = return_wall_side(pos_x, angle);
-		// printf("HIT WALL SIDE:%f\n", coords_arr[3]);
 		return (1);
 	}
 	return (0);
@@ -115,7 +109,7 @@ float	distance(float x1, float y1, float x2, float y2)
 }
 
 //TESTE DE DISTANCIA PARA RAIO VERTICAL
-int	vertical_ray(t_data *data, float m, float n, float interval, float angle, float coords_ver[4])
+int	vertical_ray(float line[2], float interval, float angle, float coords_ver[4])
 {
 	float	center[2];
 	float	new_x;
@@ -123,54 +117,46 @@ int	vertical_ray(t_data *data, float m, float n, float interval, float angle, fl
 
 	if (interval == 0)
 		return (-1);
-	center[0] = (data->player->x + (PLAYER_SIZE_V1 / 2));
-	center[1] = (data->player->y + (PLAYER_SIZE_V1 / 2));
+	center[0] = (data_()->player->x + (PLAYER_SIZE_V1 / 2));
+	center[1] = (data_()->player->y + (PLAYER_SIZE_V1 / 2));
 	if (interval > 0)
 		new_x = ceilf(center[0] / BLOCK_SIZE) * BLOCK_SIZE;
 	else
 		new_x = floorf(center[0] / BLOCK_SIZE) * BLOCK_SIZE;
 	while (1)
 	{
-		y = m * new_x + n;
-		//printf("VER: %f %f\n", new_x, y);
-		//printf("matrix->height: %d", data->matrix_height);
-		//ADDED data->matrix_height - 1 because it went over the heights. SEGMENTATION FAULT
-		if (y < 0 || y > ((data->matrix_height - 1) * BLOCK_SIZE) || new_x < 0 || new_x > ((data->matrix_width - 1) * BLOCK_SIZE))
+		y = line[0] * new_x + line[1];
+		if (y < 0 || y > ((data_()->matrix_height - 1) * BLOCK_SIZE) || new_x < 0 || new_x > ((data_()->matrix_width - 1) * BLOCK_SIZE))
 			return (-1);
-		//printf("vertical\n");
-		if (collision(data->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle, coords_ver))
+		if (collision(data_()->map, new_x / BLOCK_SIZE, y / BLOCK_SIZE, angle, coords_ver))
 			break ;
 		new_x += interval;
 	}
-	//printf("DISTANCE: %f %f %f %f\n", center[0], center[1], new_x, y);
 	return (distance(center[0], center[1], new_x, y));
 }
 
 //TESTE DE DISTANCIA PARA RAIO HORIZONTAL
-int	horizontal_ray(t_data *data, float m, float n, float interval, float angle, float coords_hor[4])
+int	horizontal_ray(float line[2], float interval, float angle, float coords_hor[4])
 {
+	//line[0] = m; line[1] = n; where f(x) = mx + n
 	float	center[2];
 	float	x;
 	float	new_y;
 
 	if (interval == 0)
 		return (-1);
-	center[0] = (data->player->x + (PLAYER_SIZE_V1 / 2));
-	center[1] = (data->player->y + (PLAYER_SIZE_V1 / 2));
+	center[0] = (data_()->player->x + (PLAYER_SIZE_V1 / 2));
+	center[1] = (data_()->player->y + (PLAYER_SIZE_V1 / 2));
 	if (interval > 0)
 		new_y = ceilf(center[1] / BLOCK_SIZE) * BLOCK_SIZE;
 	else
 		new_y = floorf(center[1] / BLOCK_SIZE) * BLOCK_SIZE;
 	while (1)
 	{
-		x = (new_y - n) / m;
-		//y = m * new_x + n;
-		//printf("HOR: %f [%d] %f [%d]\n", x / BLOCK_SIZE, data->matrix_width , new_y / BLOCK_SIZE, (data->matrix_height - 1));
-		//WONT WORK WITH IRREGULAR-END MAPS
-		if (x < 0 || x > ((data->matrix_width) * BLOCK_SIZE) || new_y < 0 || new_y > ((data->matrix_height - 1) * BLOCK_SIZE))
+		x = (new_y - line[1]) / line[0];
+		if (x < 0 || x > ((data_()->matrix_width) * BLOCK_SIZE) || new_y < 0 || new_y > ((data_()->matrix_height - 1) * BLOCK_SIZE))
 			return (-1);
-		//printf("horizontal, height: %d\n", data->matrix_height);
-		if (collision(data->map, x / BLOCK_SIZE, new_y / BLOCK_SIZE, angle, coords_hor))
+		if (collision(data_()->map, x / BLOCK_SIZE, new_y / BLOCK_SIZE, angle, coords_hor))
 			break ;
 		new_y += interval;
 	}
@@ -189,21 +175,38 @@ void	float_array_copy(float *dst, float *src, int len)
 	}
 }
 
+float	fire_rays(float angle, float increment[2], float center[2], float collision_cords[4])
+{
+	float	rays[2];
+	//line[0] = m; line[1] = n; where f(x) = mx + n
+	float	line[2];
+	float	coords_hor[4];
+	float	coords_ver[4];
+
+	if (angle == M_PI / 2 || angle == 3 * M_PI / 2)
+		return (horizontal_ray((float[]){0, 0}, increment[1], angle, collision_cords));
+	line[0] = tan(angle);
+	line[1] = center[1] - (line[0] * center[0]);
+	rays[0] = horizontal_ray(line, increment[1], angle, coords_hor);
+	rays[1] = vertical_ray(line, increment[0], angle, coords_ver);
+	//VER QUAL E O RAIO COM MENOR DISTANCIA
+	if ((rays[0] <= rays[1] && rays[0] != -1) || rays[1] == -1)
+	{
+		float_array_copy(collision_cords, coords_hor, 4);
+		return (rays[0]);
+	}
+	float_array_copy(collision_cords, coords_ver, 4);
+	return (rays[1]);
+}
+
 //DEVOLVE DISTANCIA DE UM RAIO
-float	rainbow(t_data *data, t_player *player, float angle, float collision_cords[4])
+float	rainbow(t_player *player, float angle, float collision_cords[4])
 {
 	float	center[2];
 	float	increment[2];
-	float	rays[2];
-	//VALORES DA RETA-RAIO
-	float	coords_hor[4];
-	float	coords_ver[4];
-	float	m;
-	float	n;
 
 	center[0] = (player->x + (PLAYER_SIZE_V1 / 2));
 	center[1] = (player->y + (PLAYER_SIZE_V1 / 2));
-	//VE PARA QUE LADO VAMOS INCREMENTAR DEPOIS
 	if (sin(angle) > 0)
 		increment[1] = BLOCK_SIZE;
 	else if (sin(angle) < 0)
@@ -216,52 +219,8 @@ float	rainbow(t_data *data, t_player *player, float angle, float collision_cords
 		increment[0] = -BLOCK_SIZE;
 	else
 		increment[0] = 0;
-	if (angle == M_PI / 2 || angle == 3 * M_PI / 2)
-		return (horizontal_ray(data, 0, 0, increment[1], angle, collision_cords));
-	m = tan(angle);
-	n = center[1] - (m * center[0]);
-	rays[0] = horizontal_ray(data, m, n, increment[1], angle, coords_hor);
-	rays[1] = vertical_ray(data, m, n, increment[0], angle, coords_ver);
-	//VER QUAL E O RAIO COM MENOR DISTANCIA
-	if ((rays[0] <= rays[1] && rays[0] != -1) || rays[1] == -1)
-	{
-		float_arraycopy(collision_cords, coords_hor, 4);
-		return (rays[0]);
-	}
-	float_arraycopy(collision_cords, coords_ver, 4);
-	return (rays[1]);
+	return (fire_rays(angle, increment, center, collision_cords));
 }
-
-// void	draw_3d(t_data *data, t_player *player, t_image *image)
-// {
-// 	//#define RENDER_DISTANCE == FOV_DEEPNESS
-// 	//0.5 radians == 60o
-// //	float	render_distance;
-// 	float	current_angle;
-// 	float	distant;
-// 	float	angle_step;
-// 	int		i;
-
-// 	i = 0;
-// 	current_angle = 0;
-// 	angle_step = (WINDOW_WIDTH / FOV_WIDE);
-// 	while (i < WINDOW_WIDTH)
-// 	{
-
-// 		distant = rainbow(data, player, (player->orient + current_angle));
-// 		//only in range of proper distance
-// 		//add color do #define
-// 		//printf("DISTANCE: %f\n", distant);
-// 			//draw_half(image, 13158350, 15329736);
-// 		if ((int)distant >= 6 && ((int)distant <= FOV_DEEPNESS))
-// 			draw_bar(image, distant, 500, 30000);
-// 		else
-// 			draw_bar(image, 6, 500, 1);
-// 		current_angle += angle_step;
-// 		i++;
-// 	}
-// }
-
 
 float	restrain_angle(float angle)
 {
@@ -274,30 +233,17 @@ float	restrain_angle(float angle)
 
 void	draw_line_at_angle(t_player *player, float angle, int color, int window_x, t_image *image)
 {
-/*	int		center[2];
-	int		line_len;
-	int		line[2];*/
-//	int		i;
-//	int		hit_wall_flag;
 	float	distant;
 	float	collision_cords[4];
 	
 	//cor nao e usada, apagar.
 	color += 1;
-	distant = rainbow(data_(), player, restrain_angle(player->orient + angle), collision_cords);
+	distant = rainbow(player, restrain_angle(player->orient + angle), collision_cords);
 	distant = fabs(distant * cosf(angle));
-	//printf("Colision Y:%f X:%f Block: %f\n", collision_cords[0], collision_cords[1], collision_cords[2]);
 	if ((int)distant >= 0 && ((int)distant <= FOV_DEEPNESS))
-	{
-		//printf("YO\n");
-		draw_bar(image, distant, window_x, 30000, collision_cords);
-	}
+		draw_bar(image, (BLOCK_SIZE_3D / distant) * DISTANCE_TO_SCREEN, window_x, collision_cords);
 	else
-	{
 		empty_bar(image, window_x);
-		//printf("DISTANCE: %f\n", distant);
-		//draw_bar(image, 6, window_x, 1, collision_cords);
-	}
 }
 
 //ALWAYS ODD NUMBERS OF NUM_RAYS
@@ -306,18 +252,12 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 	float	angle_step;
 	float	current_angle;
 	int		i;
-//	int	window_x;
-//	int	step_x;
 
 
 	num_rays += 1;
 	angle_step = (angle_max - angle_min) / (NUM_RAYS);
 	current_angle = angle_min;
 	i = 0;
-
-	//angle_step += 1;
-	//current_angle += 1;
-	//draw_line_at_angle(player, 0, color, i, image);
 	while (i < WINDOW_WIDTH)
 	{
 		draw_line_at_angle(player, current_angle, color, i, image);
@@ -436,35 +376,32 @@ void	empty_bar(t_image *image, int pos_x)
 }
 
 
-void	draw_bar(t_image *image, float distant, int pos_x, int color, float collision_cords[4])
+float	wall_x(float collision_cords[4])
 {
-	float	bar_size;
+	// Determinar se o raio que vamos pintar bateu na parede vetical ou horizontal
+	if (fabs(collision_cords[0] - floor(collision_cords[0])) < 0.0001)
+		return(collision_cords[1] - floor(collision_cords[1]));
+	else
+		return(collision_cords[0] - floor(collision_cords[0]));
+}
+
+void	draw_bar(t_image *image, float bar_size, int pos_x, float collision_cords[4])
+{
 	int		cur_y;
 	int		start_y;
 	int		end_y;
-	float	wall_x;
-	int		texture_x, texture_y;
+	int		texture[2];
 
-	//bar_size = WINDOW_HEIGHT - (distant - PLAYER_SIZE_V1 / 2) * (WINDOW_HEIGHT - 1) / (FOV_DEEPNESS - PLAYER_SIZE_V1 / 2);
-	color *= 2;
-	bar_size = (BLOCK_SIZE_3D / distant) * DISTANCE_TO_SCREEN;
 	start_y = (WINDOW_HEIGHT / 2) - ((int)bar_size / 2);
 	end_y = (WINDOW_HEIGHT / 2) + ((int)bar_size / 2);
-	// Determinar se o raio que vamos pintar bateu na parede vetical ou horizontal
-	if (fabs(collision_cords[0] - floor(collision_cords[0])) < 0.0001)
-		wall_x = collision_cords[1] - floor(collision_cords[1]);
-	else
-		wall_x = collision_cords[0] - floor(collision_cords[0]);
-
-	texture_x = (int)(wall_x * 64) % 64; // Mapeta para a textura
+	texture[0] = (int)(wall_x(collision_cords) * TEXTURE_SIZE) % TEXTURE_SIZE; // Mapeta para a textura
 	cur_y = 0;
 	while (cur_y < WINDOW_HEIGHT)
 	{
 		if (cur_y >= start_y && cur_y < end_y)
 		{
-			texture_y = (int)(((cur_y - start_y) / (float)(end_y - start_y)) * 64);
-			// printf("colision return texture:%f\n", collision_cords[3]);
-			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_][(int)collision_cords[3]].pixels[texture_y][texture_x]);
+			texture[1] = (int)(((cur_y - start_y) / (float)(end_y - start_y)) * 64);
+			my_mlx_pixel_put(image, cur_y, pos_x, data_()->textures[WALL_][(int)collision_cords[3]].pixels[texture[1]][texture[0]]);
 		}
 		else
 		{
@@ -513,43 +450,6 @@ void	draw_square_to_image(int x, int y, int color, int size, t_image *image)
 		s_y++;
 	}
 }
-
-// void	draw_player_lines(t_player *player, int color, t_image *image)
-// {
-// 	int	center[2];
-// 	int	line_len;
-// 	// int	line_midle[2];
-// 	int	line_right[2];
-// 	int	line_left[2];
-// 	int	flag_1;
-// 	int	flag_2;
-// 	int	i;
-
-// 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
-// 	center[1] = player->x+ (PLAYER_SIZE_V1 / 2);
-// 	line_len = 500;
-// 	i = 0;
-// 	flag_1 = 0;
-// 	flag_2 = 0;
-// 	while (i < line_len)
-// 	{
-// 		// [0] = Y // [1] = X
-// 		// line_midle[0] = center[0] + i * sin(player->orient);
-// 		// line_midle[1] = center[1] + i * cos(player->orient);
-// 		line_right[0] = center[0] + i * (sin(player->orient + 0.50));
-// 		line_right[1] = center[1] + i * (cos(player->orient + 0.50));
-// 		line_left[0] = center[0] + i * (sin(player->orient - 0.50));
-// 		line_left[1] = center[1] + i * (cos(player->orient - 0.50));
-// 		// if (!is_wall_line(data_(), line_midle[0], line_midle[1], color, &flag_1))
-// 		// 	my_mlx_pixel_put(image, line_midle[0] , line_midle[1], color);
-// 		if (flag_1 == 0 && !is_wall_line(data_(), line_right[0], line_right[1], &flag_1))
-// 			my_mlx_pixel_put(image, line_right[0] , line_right[1], color);
-// 		if (flag_2 == 0 && !is_wall_line(data_(), line_left[0], line_left[1], &flag_2))
-// 			my_mlx_pixel_put(image, line_left[0] , line_left[1], color);
-// 		i++;
-// 	}
-// }
-
 
 void	draw_minimap(t_data *data)
 {
