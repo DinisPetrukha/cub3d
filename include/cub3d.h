@@ -7,10 +7,13 @@
 
 #define RED   "\x1B[31m"
 #define RESET "\x1B[0m"
+#define WALL 0xFFFFFF
+#define FLOOR 0xB09F9E
+#define RAY	0xE7E7E7
 
 # define WINDOW_WIDTH	1280
 # define WINDOW_HEIGHT	720
-# define BLOCK_SIZE 32
+# define BLOCK_SIZE 16
 # define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5
 //FOV CANT BE MULTIPLE OF PI. OR DISTANCE_TO_SCREEN WILL EXPLODE
@@ -23,7 +26,7 @@
 # define NUMBER_OF_TEXTURES 1
 # define TEXTURE_SIZE 64
 
-# define BLOCK_SIZE_3D 64.0f
+# define BLOCK_SIZE_3D (float)(BLOCK_SIZE * 2)
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
 
 #define NUM_RAYS WINDOW_WIDTH

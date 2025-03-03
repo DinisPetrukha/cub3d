@@ -267,12 +267,34 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 	}
 }
 //x and y in pixels
-/*bool	verify_corner(int x, int y)
+bool	verify_corner(int x, int y)
 {
-	if (x - 1 = x)
+	int	top;
+	int	bottom;
+	int left;
+	int right;
+
+	top = my_mlx_pixel_get(data_()->frame, x, y - 1);
+	bottom = my_mlx_pixel_get(data_()->frame, x, y + 1);
+	left = my_mlx_pixel_get(data_()->frame, x - 1, y);
+	right = my_mlx_pixel_get(data_()->frame, x + 1, y);
+
+	if (top == WALL && right == WALL)
+		return (false);
+	if (top == WALL && left == WALL)
+		return (false);
+	if (bottom == WALL && right == WALL)
+		return (false);
+	if (bottom == WALL && left == WALL)
+		return (false);
+	return (true);
+	//if (map[y][x - 1] == '1')
+	//if (map[y - 1][x] == '1')
+	//if (map[y][x] == '1')
+	//if (collision(data_()->map, x - 1 / BLOCK_SIZE, y - 1 / BLOCKSIZE, 
 
 
-}*/
+}
 
 
 void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *image)
@@ -292,8 +314,8 @@ void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *
 		line[1] = center[1] + i * cos(player->orient + angle);
 		//arredondar 6,9 para 7 e 6.1 para 6
 		//if (float_equal(line[0], round(line[0])) || float_equal(line[1], round(line[1])))
-//
-	//		break;
+		//if (verify_corner(line[0], line[1]))
+			//break;
 		if (!is_wall_line(data_(), line[0], line[1], &hit_wall_flag))
 			my_mlx_pixel_put(image, line[0], line[1], color);
 		i++;
@@ -336,7 +358,7 @@ void	draw_player(t_player *player)
 	//printf("PL_X: %f PL_Y: %f\n", player->x, player->y);
 	draw_square_to_image(player->x, player->y, 0x00FF0000, PLAYER_SIZE_V1, data_()->frame);
 	// draw_line_at_angle_map(player, 0, 0xFFFFFF, data_()->frame);
-	draw_player_rays(player, -FOV_WIDE, FOV_WIDE, FOV_DEEPNESS, 0xE7E7E7, data_()->frame);
+	draw_player_rays(player, -FOV_WIDE, FOV_WIDE, FOV_DEEPNESS, RAY, data_()->frame);
 }
 
 //ceil color and floor color
@@ -474,9 +496,9 @@ void	draw_minimap(t_data *data)
 		while (data->map[y][x])
 		{
 			if (data->map[y][x] == '1')
-				draw_square_to_image(x * BLOCK_SIZE , y * BLOCK_SIZE , 0xFFFFFF, BLOCK_SIZE, data->frame);
+				draw_square_to_image(x * BLOCK_SIZE , y * BLOCK_SIZE , WALL, BLOCK_SIZE, data->frame);
 			if (data->map[y][x] == '0' || data->map[y][x] == 'N')
-				draw_square_to_image(x * BLOCK_SIZE , y * BLOCK_SIZE , 0xB09F9E, BLOCK_SIZE, data->frame);
+				draw_square_to_image(x * BLOCK_SIZE , y * BLOCK_SIZE , FLOOR, BLOCK_SIZE, data->frame);
 			x++;
 		}
 		y++;
