@@ -403,6 +403,10 @@ void	map_constructor(char *file)
 	print_map();
 	//map_count_row(player, file);
 	//init_map(player, file);
+	if (data_()->matrix_width * BLOCK_SIZE > WINDOW_WIDTH)
+		exitmap(data_()->map, 1, "Map too big\n");
+	if (data_()->matrix_height * BLOCK_SIZE > WINDOW_HEIGHT)
+		exitmap(data_()->map, 1, "Map too big\n");
 	check_symbols(data_()->map);
 	optimise_map(data_(), data_()->map);
 	init_data(data_());

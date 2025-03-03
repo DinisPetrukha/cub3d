@@ -8,8 +8,8 @@
 #define RED   "\x1B[31m"
 #define RESET "\x1B[0m"
 
-# define WINDOW_HEIGHT	1000
-# define WINDOW_WIDTH	1000
+# define WINDOW_WIDTH	1920
+# define WINDOW_HEIGHT	1080
 # define BLOCK_SIZE 32
 # define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5

@@ -16,6 +16,7 @@ void	my_mlx_pixel_put(t_image *image, int y, int x, int color)
 {
 	char	*dst;
 
+	//printf("y: %d x: %d\n", y, x);
 	if (color == -16777216)
 	 	return ;
 	dst = image->addr + (y * image->line_len + x * (image->bpp / 8));
@@ -304,10 +305,10 @@ void	draw_player_rays(t_player *player, float angle_min, float angle_max, int nu
 	{
 		//printf("current_angle: %f\n", current_angle);
 		//if (float_equal(current_angle, (angle_max / 2)))
-		if (i == num_rays / 2)
+		/*if (i == num_rays / 2)
 			draw_line_at_angle_map(player, current_angle, 30000, image);
-		else
-			draw_line_at_angle_map(player, current_angle, color, image);
+		else*/
+		draw_line_at_angle_map(player, current_angle, color, image);
 		current_angle += angle_step;
 		i++;
 	}
