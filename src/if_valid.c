@@ -52,7 +52,6 @@ int	is_protected(char **map, int j, int i)
 		return (0);
 	return (1);
 }
-
 void	optimise_map(t_data *data, char **map)
 {
 	int	i;
@@ -76,6 +75,11 @@ void	optimise_map(t_data *data, char **map)
 	printf("--AFTER--\n");
 	print_map();
 }
+int	ft_isspace(int c)
+{
+	return (((c >= 9) && (c <= 13)) || (c == 32));
+}
+
 
 void	check_symbols(char **map)
 {
@@ -87,8 +91,8 @@ void	check_symbols(char **map)
 	while (j < data_()->matrix_height)
 	{
 		i = 0;
-		if (!map[j][0])
-			exitmap(map, 1, "Error\nGap in map\n");
+		//if (!map[j][0])
+			//exitmap(map, 1, "Error\nGap in map\n");
 		while (map[j][i])
 		{
 			c = map[j][i];

@@ -266,6 +266,14 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 		i += (WINDOW_WIDTH / NUM_RAYS);
 	}
 }
+//x and y in pixels
+/*bool	verify_corner(int x, int y)
+{
+	if (x - 1 = x)
+
+
+}*/
+
 
 void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *image)
 {
@@ -282,6 +290,10 @@ void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *
 	{
 		line[0] = center[0] + i * sin(player->orient + angle);
 		line[1] = center[1] + i * cos(player->orient + angle);
+		//arredondar 6,9 para 7 e 6.1 para 6
+		//if (float_equal(line[0], round(line[0])) || float_equal(line[1], round(line[1])))
+//
+	//		break;
 		if (!is_wall_line(data_(), line[0], line[1], &hit_wall_flag))
 			my_mlx_pixel_put(image, line[0], line[1], color);
 		i++;
@@ -471,26 +483,6 @@ void	draw_minimap(t_data *data)
 	}
 }
 
-
-void	clear_rest(t_data *data)
-{
-	int	cur_x;
-	int	cur_y;
-
-	cur_y = 0;
-	while (cur_y < WINDOW_HEIGHT)
-	{
-		cur_x = 0;
-		while (cur_x < WINDOW_WIDTH)
-		{
-			if (cur_x > data->matrix_width * BLOCK_SIZE || cur_y > data->matrix_height * BLOCK_SIZE)
-			my_mlx_pixel_put(data->frame, cur_y, cur_x, 1);
-			cur_x++;
-		}
-		cur_y++;
-	}
-}
-
 int	loop_handler(void *param)
 {
 	struct timespec instant;
@@ -506,7 +498,6 @@ int	loop_handler(void *param)
 		//FOR DRAW_RAYS_RANGE NUMBER OF RAYS MUST BE ODD
 		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 111, 0xFFFFFF, data_()->frame);
 		draw_minimap(data);
-		//clear_rest(data);
 		draw_player(data->player);
 		mlx_put_image_to_window(data_()->mlx_ptr, data_()->window, data_()->frame->img_ptr, 0, 0);
 	// 	data->dif_timer = instant.tv_nsec / 100000000;
