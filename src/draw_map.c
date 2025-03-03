@@ -280,14 +280,14 @@ bool	verify_corner(int x, int y)
 	right = my_mlx_pixel_get(data_()->frame, x + 1, y);
 
 	if (top == WALL && right == WALL)
-		return (false);
+		return (true);
 	if (top == WALL && left == WALL)
-		return (false);
+		return (true);
 	if (bottom == WALL && right == WALL)
-		return (false);
+		return (true);
 	if (bottom == WALL && left == WALL)
-		return (false);
-	return (true);
+		return (true);
+	return (false);
 	//if (map[y][x - 1] == '1')
 	//if (map[y - 1][x] == '1')
 	//if (map[y][x] == '1')
@@ -314,8 +314,8 @@ void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *
 		line[1] = center[1] + i * cos(player->orient + angle);
 		//arredondar 6,9 para 7 e 6.1 para 6
 		//if (float_equal(line[0], round(line[0])) || float_equal(line[1], round(line[1])))
-		//if (verify_corner(line[0], line[1]))
-			//break;
+		if (verify_corner(line[1], line[0]))
+			break;
 		if (!is_wall_line(data_(), line[0], line[1], &hit_wall_flag))
 			my_mlx_pixel_put(image, line[0], line[1], color);
 		i++;
