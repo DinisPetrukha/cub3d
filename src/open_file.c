@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/02/06 16:08:33 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:27:51 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ int	add_color(int i, char *line, int value, int colors[3])
 
 void	exit_error(char *str, int exit_int)
 {
-	printf(str);
+	ft_putstr_fd(str, 2);
 	exit(exit_int);
 }
 
