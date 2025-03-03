@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:02:04 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/12/27 13:15:28 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:24:01 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_image(t_image *image)
 {
-	image->img_ptr = mlx_new_image(data_()->mlx_ptr, WINDOW_HEIGHT, WINDOW_WIDTH);
+	image->img_ptr = mlx_new_image(data_()->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	image->addr = mlx_get_data_addr(image->img_ptr, &image->bpp,
 			&image->line_len, &image->endian);
 }

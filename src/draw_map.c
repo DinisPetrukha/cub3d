@@ -270,17 +270,15 @@ void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num
 void	draw_line_at_angle_map(t_player *player, float angle, int color , t_image *image)
 {
 	int		center[2];
-	int		line_len;
 	int		line[2];
 	int		i;
 	int		hit_wall_flag;
 
 	center[0] = player->y + (PLAYER_SIZE_V1 / 2);
 	center[1] = player->x + (PLAYER_SIZE_V1 / 2);
-	line_len = 305;
 	i = 0;
 	hit_wall_flag = 0;
-	while (i < line_len && hit_wall_flag == 0)
+	while (i < FOV_DEEPNESS && hit_wall_flag == 0)
 	{
 		line[0] = center[0] + i * sin(player->orient + angle);
 		line[1] = center[1] + i * cos(player->orient + angle);

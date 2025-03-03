@@ -1,5 +1,5 @@
-#ifndef CUB3_H
-# define CUB3_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
@@ -8,8 +8,8 @@
 #define RED   "\x1B[31m"
 #define RESET "\x1B[0m"
 
-# define WINDOW_WIDTH	1920
-# define WINDOW_HEIGHT	1080
+# define WINDOW_WIDTH	1280
+# define WINDOW_HEIGHT	720
 # define BLOCK_SIZE 32
 # define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5
@@ -26,7 +26,7 @@
 # define BLOCK_SIZE_3D 64.0f
 # define DISTANCE_TO_SCREEN (WINDOW_WIDTH / 2) / tan(FOV / 2)
 
-#define NUM_RAYS 1000
+#define NUM_RAYS WINDOW_WIDTH
 
 # define W 119
 # define UP 65362
