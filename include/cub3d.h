@@ -1,6 +1,9 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+#define TARGET_FPS 120
+#define TARGET_FRAME_TIME (1000000 / TARGET_FPS)  // in microseconds
+
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
@@ -55,7 +58,7 @@
 # include <stdarg.h>
 # include <stdint.h>
 # include <stdbool.h>
-# include <time.h>
+# include <sys/time.h>
 
 typedef unsigned char byte;
 

@@ -505,24 +505,32 @@ void	draw_minimap(t_data *data)
 	}
 }
 
+long	get_time_ms()
+{
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000000 + tv.tv_sec);
+}
+
+void busy_wait(long long wait_time) {
+    long long start_time = get_time_ms();
+    long long current_time = start_time;
+    
+    // Busy-wait until the target time has passed
+    while ((current_time - start_time) < wait_time) {
+        current_time = get_time_ms();
+    }
+}
+
 int	loop_handler(void *param)
 {
-	struct timespec instant;
-
-	clock_gettime(CLOCK_REALTIME, &instant);
 	t_data *data = (t_data *)param;
-	// if ((data->dif_timer != instant.tv_nsec / 100000000) && (instant.tv_nsec / 100000000 % 1 == 0))
-	// {
-	// printf("PLAYER: ORIENT: %f\n", data->player->orient);
-		apply_changes(data);
-		//draw_3d(data, data->player, data->frame);
-		//draw_half(data->frame, 13158350, 15329736);
-		//FOR DRAW_RAYS_RANGE NUMBER OF RAYS MUST BE ODD
-		draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 111, 0xFFFFFF, data_()->frame);
-		draw_minimap(data);
-		draw_player(data->player);
-		mlx_put_image_to_window(data_()->mlx_ptr, data_()->window, data_()->frame->img_ptr, 0, 0);
-	// 	data->dif_timer = instant.tv_nsec / 100000000;
-	// }
+
+	apply_changes(data);
+	draw_rays_range(data_()->player, -FOV_WIDE, FOV_WIDE, 111, 0xFFFFFF, data_()->frame);
+	draw_minimap(data);
+	draw_player(data->player);
+	mlx_put_image_to_window(data_()->mlx_ptr, data_()->window, data_()->frame->img_ptr, 0, 0);
 	return (0);
 }
