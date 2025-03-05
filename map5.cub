@@ -1,10 +1,10 @@
-NO     texture/red_brick.xpm
-SO                texture/eagle.xpm
-WE texture/mossy.xpm
-EA texture/color_stone.xpm
+NO     texture/BRICK_1A.xpm
+SO                texture/BRICK_3B.xpm
+WE texture/BRICK_3D.xpm
+EA texture/BRICK.xpm
 
-C 00,00,100
-F 50,100,0
+C 103,99,95
+F 24,54,30
 
 1111111
 1000001
