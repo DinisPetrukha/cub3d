@@ -55,3 +55,21 @@ int	close_window(t_data *data)
 	}
 	exit(0);
 }
+
+int	error_return(char *str, int value)
+{
+	ft_putstr_fd(str, 2);
+	return (value);
+}
+
+void	exit_error(char *str, int exit_int)
+{
+	ft_putstr_fd(str, 2);
+	exit(exit_int);
+}
+
+void	write_close_window(char *str)
+{
+	ft_putstr_fd(str, 2);
+	close_window(data_());
+}

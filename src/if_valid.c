@@ -12,29 +12,6 @@
 
 #include "../include/cub3d.h"
 
-void	exitmap(char **map, int ret, char *msg)
-{
-	ft_putstr_fd(msg, 2);
-	clean_textures(data_());
-	free_map(map);
-	exit(ret);
-}
-
-void	free_map(char **map)
-{
-	int	i;
-
-	i = 0;
-	if (!map)
-		return ;
-	while (map[i])
-	{
-		free(map[i]);
-		i++;
-	}
-	free(map);
-}
-
 int	is_protected(char **map, int j, int i)
 {
 	if (j == 0 || map[j - 1][i] == 32)
@@ -54,8 +31,6 @@ void	optimise_map(t_data *data, char **map)
 	int	j;
 
 	j = 0;
-	printf("--BEFORE--\n");
-	print_map();
 	(void) map;
 	while (j < data->matrix_height)
 	{
@@ -68,31 +43,6 @@ void	optimise_map(t_data *data, char **map)
 		}
 		j++;
 	}
-	printf("--AFTER--\n");
-	print_map();
-}
-
-int	ft_isspace(int c)
-{
-	return (((c >= 9) && (c <= 13)) || (c == 32));
-}
-
-int	only_spaces(char *line)
-{
-	int	i;
-	int	only;
-
-	i = 0;
-	only = 1;
-	if (line[0] && line[0] == '\n')
-		return (only);
-	while (line[i])
-	{
-		if (!ft_isspace(line[i]))
-			only = 0;
-		i++;
-	}
-	return (only);
 }
 
 void	check_symbols(char **map)

@@ -1,6 +1,7 @@
 NAME = cub3d
-SRC = src/my_ft_strjoin.c src/main.c src/data_utils.c src/open_file.c src/game_init.c src/functions_utils.c \
-		src/draw_map.c src/close_free.c src/player_movement.c src/if_valid.c
+SRC = src/aux.c src/close_free.c src/data_utils.c src/draw_map.c src/functions_utils.c src/game_init.c src/helper.c \
+		src/if_valid.c src/keyboard_apply.c src/keyboard.c src/main.c src/map_constructor.c src/minimap.c \
+		src/my_ft_strjoin.c src/open_file.c src/physics.c src/player_movement.c src/rays.c src/texture_creator.c
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS = -Wall -Werror -Wextra  -O3 -Ofast

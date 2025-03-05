@@ -4,6 +4,12 @@
 		"string": "c",
 		"string_view": "c",
 		"initializer_list": "c",
-		"utility": "c"
+		"utility": "c",
+		"random": "cpp",
+		"chrono": "cpp",
+		"text_encoding": "cpp",
+		"typeinfo": "cpp",
+		"span": "cpp",
+		"cstddef": "c"
 	}
 }
