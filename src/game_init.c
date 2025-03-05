@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:47:46 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/03/03 13:23:40 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:46:50 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,38 +62,28 @@ void	load_all_images(t_data *data)
 	copy_static_array(&data->textures[WALL_][3]);
 }
 
-void print_texture(unsigned texture[TEXTURE_SIZE][TEXTURE_SIZE]) {
-	for (int y = 0; y < TEXTURE_SIZE; y++) {
-		for (int x = 0; x < TEXTURE_SIZE; x++) {
-			printf("%3d", texture[y][x]);  // Exibe cada valor da textura
-		}
-		printf("\n");  // Pula para a próxima linha após imprimir uma linha da textura
-	}
-}
-
-// Retun 1 if success
+// Return 1 if success
 // Return 0 if not success
 int	game_init(void)
 {
 	static t_data	*data;
 	static t_image	frame;
+
 	data = data_();
 	data->dif_timer = 0;
-	// Initializing The Mlx
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		return (0);
-	data->window = mlx_new_window(data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+	data->window = mlx_new_window(data->mlx_ptr, \
+		WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	if (!data->window)
 		return (0);
-	// Initializing The Main Frame
 	data->frame = &frame;
 	init_image(data->frame);
 	load_all_images(data);
 	init_keys(data);
 	mlx_hook(data->window, DestroyNotify, StructureNotifyMask,
 		close_window, data);
-	// Loop The Game
 	mlx_hook(data->window, KeyPress, KeyPressMask, key_press, data);
 	mlx_hook(data->window, KeyRelease, KeyReleaseMask, key_lift, data);
 	mlx_loop_hook(data->mlx_ptr, loop_handler, data);

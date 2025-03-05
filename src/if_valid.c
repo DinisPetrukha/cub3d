@@ -37,21 +37,17 @@ void	free_map(char **map)
 
 int	is_protected(char **map, int j, int i)
 {
-	//above
-	//printf("j: %d i: %d: %c\n", j, i, map[j][i]);
 	if (j == 0 || map[j - 1][i] == 32)
 		return (0);
-	//below
 	if (j == data_()->matrix_height - 1 || map[j + 1][i] == 32)
 		return (0);
-	//left
 	if (i == 0 || map[j][i - 1] == 32)
 		return (0);
-	//right
 	if (i == data_()->matrix_width - 1 || map[j][i + 1] == 32)
 		return (0);
 	return (1);
 }
+
 void	optimise_map(t_data *data, char **map)
 {
 	int	i;
@@ -67,7 +63,7 @@ void	optimise_map(t_data *data, char **map)
 		while (i < data->matrix_width)
 		{
 			if (map[j][i] == 0 || map[j][i] == ' ')
-			 	map[j][i] = '1';
+				map[j][i] = '1';
 			i++;
 		}
 		j++;
@@ -75,6 +71,7 @@ void	optimise_map(t_data *data, char **map)
 	printf("--AFTER--\n");
 	print_map();
 }
+
 int	ft_isspace(int c)
 {
 	return (((c >= 9) && (c <= 13)) || (c == 32));
@@ -89,7 +86,7 @@ int	only_spaces(char *line)
 	only = 1;
 	if (line[0] && line[0] == '\n')
 		return (only);
-	while(line[i])
+	while (line[i])
 	{
 		if (!ft_isspace(line[i]))
 			only = 0;
@@ -113,7 +110,7 @@ void	check_symbols(char **map)
 		while (map[j][i])
 		{
 			c = map[j][i];
-			if (!(c == 32 || c == 10 || c == '0' || c == '1'
+			if (!(c == 32 || c == 10 || c == '0' || c == '1' \
 				|| c == 'S' || c == 'W' || c == 'N' || c == 'E'))
 				exitmap(map, 1, "Error\nWrong letter\n");
 			if (c != 32 && c != '1' && c != 10)
@@ -127,16 +124,17 @@ void	check_symbols(char **map)
 	}
 }
 
+//90, 270, 180 and 0 degrees
 void	player_orient_reading(int j, int i, t_player *player, char **map)
 {
 	if (map[j][i] == 'N')
-		player->orient = 3 * M_PI / 2; // 90º
+		player->orient = 3 * M_PI / 2;
 	if (map[j][i] == 'S')
-		player->orient = M_PI / 2; // 270º
+		player->orient = M_PI / 2;
 	if (map[j][i] == 'W')
-		player->orient = M_PI; // 180º
+		player->orient = M_PI;
 	if (map[j][i] == 'E')
-		player->orient = 0; // 0º
+		player->orient = 0;
 }
 
 void	check_player(char **map, t_player *player)

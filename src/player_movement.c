@@ -30,7 +30,6 @@ void	player_input(t_binds *key, int keycode, bool pressed)
 		close_window(data_());
 }
 
-
 int	key_lift(int keycode, t_data *data)
 {
 	player_input(data->key, keycode, false);
@@ -67,22 +66,20 @@ int	is_wall_player(t_data *data, float next_y, float next_x)
 	int	bottom_right[2];
 	int	bottom_left[2];
 
-	// Convertendo as coordenadas do jogador para blocos na matriz
 	top_left[0] = (int)(next_y / BLOCK_SIZE);
 	top_left[1] = (int)(next_x / BLOCK_SIZE);
 	top_right[0] = (int)(next_y / BLOCK_SIZE);
-	top_right[1] = (int)((next_x + PLAYER_SIZE_V1) / BLOCK_SIZE);
-	bottom_right[0] = (int)((next_y + PLAYER_SIZE_V1) / BLOCK_SIZE);
-	bottom_right[1] = (int)((next_x + PLAYER_SIZE_V1) / BLOCK_SIZE);
-	bottom_left[0] = (int)((next_y + PLAYER_SIZE_V1) / BLOCK_SIZE);
+	top_right[1] = (int)((next_x + PLYRSIZE) / BLOCK_SIZE);
+	bottom_right[0] = (int)((next_y + PLYRSIZE) / BLOCK_SIZE);
+	bottom_right[1] = (int)((next_x + PLYRSIZE) / BLOCK_SIZE);
+	bottom_left[0] = (int)((next_y + PLYRSIZE) / BLOCK_SIZE);
 	bottom_left[1] = (int)(next_x / BLOCK_SIZE);
-	if (data->map[top_left[0]][top_left[1]] == '1' ||    // Canto superior esquerdo
-		data->map[top_right[0]][top_right[1]] == '1' ||   // Canto superior direito
-		data->map[bottom_right[0]][bottom_right[1]] == '1' || // Canto inferior direito
-		data->map[bottom_left[0]][bottom_left[1]] == '1')  // Canto inferior esquerdo
-		return (1); // Colisão detectada
-
-	return (0); // Sem colisão
+	if (data->map[top_left[0]][top_left[1]] == '1' ||
+		data->map[top_right[0]][top_right[1]] == '1' ||
+		data->map[bottom_right[0]][bottom_right[1]] == '1' ||
+		data->map[bottom_left[0]][bottom_left[1]] == '1')
+		return (1);
+	return (0);
 }
 
 void	move_up(t_data *data, t_player *player, float pos_y, float pos_x)
@@ -107,25 +104,27 @@ void	move_down(t_data *data, t_player *player, float pos_y, float pos_x)
 	}
 }
 
-void	move_left(t_data *data, t_player *player, float strafe_y, float strafe_x)
+//strafe_y, strafe_x
+void	move_left(t_data *data, t_player *player, float s_y, float s_x)
 {
 	if (data->key->move_left)
 	{
-		if (!is_wall_player(data, player->y - strafe_y, player->x))
-			player->y -= strafe_y;
-		if (!is_wall_player(data, player->y, player->x - strafe_x))
-			player->x -= strafe_x;
+		if (!is_wall_player(data, player->y - s_y, player->x))
+			player->y -= s_y;
+		if (!is_wall_player(data, player->y, player->x - s_x))
+			player->x -= s_x;
 	}
 }
 
-void	move_right(t_data *data, t_player *player, float strafe_y, float strafe_x)
+//strafe_y, strafe_x
+void	move_right(t_data *data, t_player *player, float s_y, float s_x)
 {
 	if (data->key->move_right)
 	{
-		if (!is_wall_player(data, player->y + strafe_y, player->x))
-			player->y += strafe_y;
-		if (!is_wall_player(data, player->y, player->x + strafe_x))
-			player->x += strafe_x;
+		if (!is_wall_player(data, player->y + s_y, player->x))
+			player->y += s_y;
+		if (!is_wall_player(data, player->y, player->x + s_x))
+			player->x += s_x;
 	}
 }
 
@@ -149,28 +148,21 @@ void	camera_right(t_data *data, t_player *player)
 	}
 }
 
-void apply_changes(t_data *data)
+void	apply_changes(t_data *data)
 {
-	float pos_y;
-	float pos_x;
-	float strafe_y;
-	float strafe_x;
+	float	pos_y;
+	float	pos_x;
+	float	strafe_y;
+	float	strafe_x;
 
-	t_player *player = data->player;
-	pos_y = (PLAYER_SPEED * sin(player->orient));
-	pos_x = (PLAYER_SPEED * cos(player->orient));
-	strafe_y = (PLAYER_SPEED * cos(player->orient));
-	strafe_x = -(PLAYER_SPEED * sin(player->orient));
-	move_up(data, player, pos_y, pos_x);
-	move_down(data, player, pos_y, pos_x);
-	move_right(data, player, strafe_y, strafe_x);
-	move_left(data, player, strafe_y, strafe_x);
-	camera_left(data, player);
-	camera_right(data, player);
+	pos_y = (PLAYER_SPEED * sin(data->player->orient));
+	pos_x = (PLAYER_SPEED * cos(data->player->orient));
+	strafe_y = (PLAYER_SPEED * cos(data->player->orient));
+	strafe_x = -(PLAYER_SPEED * sin(data->player->orient));
+	move_up(data, data->player, pos_y, pos_x);
+	move_down(data, data->player, pos_y, pos_x);
+	move_right(data, data->player, strafe_y, strafe_x);
+	move_left(data, data->player, strafe_y, strafe_x);
+	camera_left(data, data->player);
+	camera_right(data, data->player);
 }
-
-// int	keypress(int keycode, t_data *data)
-// {
-// 	player_movement(keycode, data);
-// 	return (1);
-// }

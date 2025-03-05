@@ -6,7 +6,7 @@
 /*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:41:37 by dpetrukh          #+#    #+#             */
-/*   Updated: 2024/11/17 18:36:21 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:32:19 by dpetrukh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_map(void)
 	{
 		while (data_()->map[i])
 		{
-			printf("%s\n",data_()->map[i]);
+			printf("%s\n", data_()->map[i]);
 			i++;
 		}
 	}

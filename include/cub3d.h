@@ -17,9 +17,8 @@
 # define WINDOW_WIDTH	1280
 # define WINDOW_HEIGHT	720
 # define BLOCK_SIZE 16
-# define PLAYER_SIZE_V1 BLOCK_SIZE * 0.375
+# define PLYRSIZE BLOCK_SIZE * 0.375
 # define FOV_WIDE 0.5
-//FOV CANT BE MULTIPLE OF PI. OR DISTANCE_TO_SCREEN WILL EXPLODE
 # define FOV 1.0472 // 60 degrees in raians
 # define FOV_DEEPNESS 300
 
@@ -109,7 +108,7 @@ typedef struct s_data {
 	int			matrix_width;
 	int			matrix_height;
 	int			dif_timer;
-	int			ceiling_texture;
+	int			cel_tex;
 	int			floor_texture;
 //	char		*textures; [0] = N [1] = E [2] = S [3] = W
 	t_binds		*key;
@@ -163,12 +162,12 @@ void	player_input(t_binds *key, int keycode, bool pressed);
 
 void	draw_half(t_image *image, int ccolor, int fcolor);
 void	empty_bar(t_image *image, int pos_x);
-void	draw_bar(t_image *image, float bar_size, int pos_x, float collision_cords[4]);
+void	draw_bar(int c, float bar_size, int pos_x, float collision_cords[4]);
 
 int		loop_handler(void *param);
-void	draw_rays_range(t_player *player, float angle_min, float angle_max, int num_rays, int color, t_image *image);
+void	draw_rays_range(float angle_min, float angle_max, int num_rays, int color);
 //void	draw_player_lines(t_player *player, int color, t_image *image);
-void	draw_square_to_image(int x, int y, int color, int size, t_image *image);
+void	draw_square(int x, int y, int color, int size);
 void	draw_player(t_player *player);
 void	my_mlx_pixel_put(t_image *image, int y, int x, int color);
 unsigned int	my_mlx_pixel_get(t_image *data, int x, int y);

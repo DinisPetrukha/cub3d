@@ -18,13 +18,11 @@ void	clean_textures(t_data *data)
 	int	j;
 
 	i = 0;
-	//NUMBER OF ELEMENTS
 	while (i < NUMBER_OF_TEXTURES)
 	{
 		j = 0;
 		while (j < 4)
 		{
-
 			if (data->textures[i][j].path)
 			{
 				free(data->textures[i][j].path);
@@ -40,7 +38,6 @@ void	clean_textures(t_data *data)
 		i++;
 	}
 }
-
 
 int	close_window(t_data *data)
 {
