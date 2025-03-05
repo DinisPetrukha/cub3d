@@ -51,12 +51,24 @@ fclean: clean
 re: fclean all
 
 1:
-	@make && ./$(NAME) map/map.cub
+	@make && ./$(NAME) map/map1.cub
 
 2:
 	@make && ./$(NAME) map/map2.cub
 
+3:
+	@make && ./$(NAME) map/map3.cub
+
 4:
 	@make && ./$(NAME) map/map4.cub
+
+5:
+	@make && ./$(NAME) map/map5.cub
+
+6:
+	@make && ./$(NAME) map/map6.cub
+
+7:
+	@make && ./$(NAME) map/map7.cub
 
 .PHONY: all clean fclean re
