@@ -6,7 +6,7 @@
 /*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:25:32 by sephilip          #+#    #+#             */
-/*   Updated: 2025/03/05 16:58:04 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:27:15 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ void	map_constructor(char *file)
 	data_()->floor_texture = 0;
 	input_file(data_(), file, 0, 0);
 	if (data_()->matrix_width * BLOCK_SIZE > WINDOW_WIDTH)
-		exitmap(data_()->map, 1, "Map too big for this proportion\n");
+		exitmap(data_()->map, 1, "Error\nMap too big for this proportion\n");
 	if (data_()->matrix_height * BLOCK_SIZE > WINDOW_HEIGHT)
-		exitmap(data_()->map, 1, "Map too big for this proportion\n");
+		exitmap(data_()->map, 1, "Error\nMap too big for this proportion\n");
 	check_symbols(data_()->map);
 	optimise_map(data_(), data_()->map);
 	init_data(data_());

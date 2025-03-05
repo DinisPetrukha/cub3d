@@ -6,7 +6,7 @@
 /*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:29:22 by sephilip          #+#    #+#             */
-/*   Updated: 2025/03/05 15:02:01 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:48:17 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 int	add_color(int i, int j, char *line, int colors[4])
 {
 	if (ft_strlen(line) < 8 || ft_strlen(line) > 14)
-		return (error_return("Wrong input of colors\n", -10000000));
+		return (free(line), \
+			write_close_window("Error\nWrong input of colors\n"), -10);
 	while (line[j] && i < 3)
 	{
 		colors[i] = ft_coloratoi(&line[j], 0, 0);
 		if (colors[i] < 0 || colors[i] > 255)
-			return (error_return("Captured bad numbers\n", -10000000));
+			return (free(line), \
+				write_close_window("Error\nCaptured bad numbers\n"), -10);
 		while (line[j])
 		{
 			if (line[j] < '0' || line[j] > '9')
@@ -82,7 +84,8 @@ int	add_texture(char *line, char **mem, int value)
 	while (line[i] && ft_strchr(" \n", line[i]))
 		i++;
 	if (!line[i])
-		return (ft_putstr_fd("INVALID PATH TEXTURE INPUT\n", 2), -10);
+		return (free(line), \
+			write_close_window("Error\nInvalid path texture\n"), -10);
 	len = i;
 	while (line[len] && ft_isascii(line[len]) && !ft_strchr(" \n", line[len]))
 		len++;
@@ -91,10 +94,8 @@ int	add_texture(char *line, char **mem, int value)
 	i = open(path, O_RDONLY);
 	if (i < 0)
 	{
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": CAN'T ACCESS TEXTURE PATH FILE:\n", 2);
-		free(path);
-		return (-10000000);
+		return (free(line), free(path), \
+			write_close_window("Error\nCant access texture\n"), -10);
 	}
 	close(i);
 	*mem = path;

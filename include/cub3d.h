@@ -6,7 +6,7 @@
 /*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:20:57 by sephilip          #+#    #+#             */
-/*   Updated: 2025/03/05 16:42:06 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:45:04 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ void			write_close_window(char *str);
 
 //DATA_UTILS.C
 t_data			*data_(void);
-void			print_map(void);
 
 //DRAW_MAP.C
 void			empty_bar(t_image *image, int pos_x);

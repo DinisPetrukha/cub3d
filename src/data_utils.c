@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dpetrukh <dpetrukh@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:41:37 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/03/05 12:32:19 by dpetrukh         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:44:55 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_data	*data_(void)
 
 	return (&data);
 }
-
+/*
 void	print_map(void)
 {
 	int	i;
@@ -32,4 +32,4 @@ void	print_map(void)
 			i++;
 		}
 	}
-}
+}*/
