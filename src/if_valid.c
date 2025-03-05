@@ -80,6 +80,23 @@ int	ft_isspace(int c)
 	return (((c >= 9) && (c <= 13)) || (c == 32));
 }
 
+int	only_spaces(char *line)
+{
+	int	i;
+	int	only;
+
+	i = 0;
+	only = 1;
+	if (line[0] && line[0] == '\n')
+		return (only);
+	while(line[i])
+	{
+		if (!ft_isspace(line[i]))
+			only = 0;
+		i++;
+	}
+	return (only);
+}
 
 void	check_symbols(char **map)
 {
@@ -91,8 +108,8 @@ void	check_symbols(char **map)
 	while (j < data_()->matrix_height)
 	{
 		i = 0;
-		//if (!map[j][0])
-			//exitmap(map, 1, "Error\nGap in map\n");
+		if (only_spaces(map[j]))
+			exitmap(map, 1, "Error\nGap in map\n");
 		while (map[j][i])
 		{
 			c = map[j][i];

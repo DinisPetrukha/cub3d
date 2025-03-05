@@ -1,14 +1,20 @@
 NO     texture/red_brick.xpm
 SO                texture/eagle.xpm
 WE texture/mossy.xpm
-EA .//texture/mossy.xpm
+EA ./texture/mossy.xpm
 
-C 00,00,100
+C 100,100,100
 F 50,100,0
 
-111
-1S1
-111
-111
-111
-111
+11111111
+1S0000001
+11111111
+1
+   1111
+   11101
+    111
+    1111
+  1
+1
+1
+1

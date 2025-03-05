@@ -6,7 +6,7 @@
 /*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 13:38:17 by dpetrukh          #+#    #+#             */
-/*   Updated: 2025/03/03 16:00:58 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:06:13 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int	printf_return(char *str, int num)
 	return (num);
 }
 
-int	add_texture(char *line, char **mem)
+int	add_texture(char *line, char **mem, int value)
 {
 	int		i;
 	int		len;
@@ -180,11 +180,11 @@ int	add_texture(char *line, char **mem)
 	{
 		printf("CAN'T ACCESS TEXTURE PATH FILE:\n%s\n", path);
 		free(path);
-		return (-10);
+		return (-10000000);
 	}
 	close(i);
 	*mem = path;
-	return (1);
+	return (value);
 }
 
 int	encode_rgb(byte red, byte green, byte blue)
@@ -230,11 +230,11 @@ int	error_return(char *str, int value)
 
 int	apply_colors(t_data *data, int colors[3], int value)
 {
-	if (value == 1)
+	if (value == 10000)
 		data->ceiling_texture = encode_rgb(colors[0], colors[1], colors[2]);
-	if (value == 2)
+	if (value == 100000)
 		data->floor_texture = encode_rgb(colors[0], colors[1], colors[2]);
-	return (1);
+	return (value);
 }
 
 //colors[3] are all 0 at the start
@@ -244,13 +244,13 @@ int	add_color(int i, char *line, int value, int colors[3])
 	int	j;
 
 	if (ft_strlen(line) < 8 || ft_strlen(line) > 14)
-		return(error_return("Wrong input of colors\n", -10));
+		return(error_return("Wrong input of colors\n", -10000000));
 	j = 2;
 	while (line[j] && i < 3)
 	{
 		colors[i] = ft_coloratoi(&line[j], 0, 0);
 		if (colors[i] < 0 || colors[i] > 255)
-			return (error_return("Captured bad numbers\n", -10));
+			return (error_return("Captured bad numbers\n", -10000000));
 		while (line[j])
 		{
 			if (line[j] < '0' || line[j] > '9')
@@ -260,13 +260,13 @@ int	add_color(int i, char *line, int value, int colors[3])
 					j++;
 					break ;
 				}
-				return (-10);
+				return (-10000000);
 			}
 			j++;
 		}
 		i++;
 	}
-	return(apply_colors(data_(), colors, value), 1);
+	return(apply_colors(data_(), colors, value));
 }
 
 void	exit_error(char *str, int exit_int)
@@ -281,28 +281,41 @@ void write_close_window(char *str)
 	close_window(data_());
 }
 
+void map_height_count(char *line, int *start_map, int line_nbr)
+{
+		if (line[0] != '\n' || *start_map != -1)
+		{
+			if (*start_map == -1)
+				*start_map = line_nbr;
+			if (ft_strlen(line) > (size_t)data_()->matrix_width)
+				data_()->matrix_width = ft_strlen(line) - 1;
+			data_()->matrix_height++;
+		}
+}
+// 0000000 1111111 1100000
 int	read_file(char *line, int step, int *start_map, int line_nbr)
 {
-	if (line[0] != '\n' && !ft_strncmp(line, "NO ", 3) && step == 1)
-		step += add_texture(line, &data_()->textures[WALL_][0].path);
-	else if (line[0] != '\n' && !ft_strncmp(line, "SO ", 3) && step == 2)
-		step += add_texture(line, &data_()->textures[WALL_][1].path);
-	else if (line[0] != '\n' && !ft_strncmp(line, "WE ", 3) && step == 3)
-		step += add_texture(line, &data_()->textures[WALL_][2].path);
-	else if (line[0] != '\n' && !ft_strncmp(line, "EA ", 3) && step == 4)
-		step += add_texture(line, &data_()->textures[WALL_][3].path);
-	else if (line[0] != '\n' && !ft_strncmp(line, "C", 1) && step == 5)
-		step += add_color(0, line, 1, (int[]){0, 0, 0});
-	else if (line[0] != '\n' && !ft_strncmp(line, "F", 1) && step == 6)
-		step += add_color(0, line, 2, (int[]){0, 0, 0});
-	else if (line[0] != '\n' && step == 7)
-	{
-		if (*start_map == -1)
-			*start_map = line_nbr;
-		if (ft_strlen(line) > (size_t)data_()->matrix_width)
-			data_()->matrix_width = ft_strlen(line) - 1;
-		data_()->matrix_height++;
-	}
+	int old_step;
+
+	old_step = step;
+	//printf("map_start: %d\n", *start_map);
+	printf("line_nbr: %d\n", line_nbr);
+	if (line[0] != '\n' && !ft_strncmp(line, "NO ", 3))
+		step += add_texture(line, &data_()->textures[WALL_][0].path, 1);
+	else if (line[0] != '\n' && !ft_strncmp(line, "SO ", 3))
+		step += add_texture(line, &data_()->textures[WALL_][1].path, 10);
+	else if (line[0] != '\n' && !ft_strncmp(line, "WE ", 3))
+		step += add_texture(line, &data_()->textures[WALL_][2].path, 100);
+	else if (line[0] != '\n' && !ft_strncmp(line, "EA ", 3))
+		step += add_texture(line, &data_()->textures[WALL_][3].path, 1000);
+	else if (line[0] != '\n' && !ft_strncmp(line, "C", 1))
+		step += add_color(0, line, 10000, (int[]){0, 0, 0});
+	else if (line[0] != '\n' && !ft_strncmp(line, "F", 1))
+		step += add_color(0, line, 100000, (int[]){0, 0, 0});
+	else if (step == 111111)
+		map_height_count(line, start_map, line_nbr);
+	if (line[0] != '\n' && old_step == step && step != 111111)
+		return (-10000000);
 	return (step);
 }
 
@@ -317,8 +330,9 @@ void	input_file(t_data *data, char *file, int line_nbr, int step)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		exit_error("Error\nCouldnt open file\n", 1);
-	while (step > 0)
+	while (step >= 0)
 	{
+		printf("STEPS:%d\n", step);
 		line = get_next_line(fd);
 		if (!line)
 			break;
@@ -326,13 +340,15 @@ void	input_file(t_data *data, char *file, int line_nbr, int step)
 		line_nbr++;
 		free(line);
 	}
-	if (step != 7)
+		printf("STEPITOS:%d\n", step);
+	if (step != 111111)
 		write_close_window("Error\nNot every step of the map is complete\n");
 	if (data->matrix_height < 3)
 		write_close_window("Error\nMap is too low\n");
 	if (data->matrix_width < 3)
 		write_close_window("Error\nMap not wide enought or it doesnt exist\n");
 	close(fd);
+	printf("height: %d\n", data->matrix_height);
 	init_map(data, file, start_map);
 }
 
@@ -399,7 +415,7 @@ void	map_constructor(char *file)
 	//colour_check
 	data_()->ceiling_texture = 0;
 	data_()->floor_texture = 0;
-	input_file(data_(), file, 0, 1);
+	input_file(data_(), file, 0, 0);
 	print_map();
 	//map_count_row(player, file);
 	//init_map(player, file);
