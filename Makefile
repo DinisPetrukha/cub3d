@@ -4,7 +4,7 @@ SRC = src/aux.c src/close_free.c src/data_utils.c src/draw_map.c src/functions_u
 		src/my_ft_strjoin.c src/open_file.c src/physics.c src/player_movement.c src/rays.c src/texture_creator.c
 OBJ = $(SRC:.c=.o)
 CC = cc
-CFLAGS = -Wall -Werror -Wextra  -O3 -Ofast
+CFLAGS = -Wall -Werror -Wextra
 INCLUDES = -I include/
 LIBFT = include/libft/libft.a
 LIBFT_LIB = include/libft
@@ -51,12 +51,12 @@ fclean: clean
 re: fclean all
 
 1:
-	@make && ./$(NAME) map.cub
+	@make && ./$(NAME) map/map.cub
 
 2:
-	@make && ./$(NAME) map2.cub
+	@make && ./$(NAME) map/map2.cub
 
 4:
-	@make && ./$(NAME) map4.cub
+	@make && ./$(NAME) map/map4.cub
 
 .PHONY: all clean fclean re

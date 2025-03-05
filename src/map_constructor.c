@@ -6,7 +6,7 @@
 /*   By: sephilip <sephilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:25:32 by sephilip          #+#    #+#             */
-/*   Updated: 2025/03/05 16:09:00 by sephilip         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:58:04 by sephilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ int	read_file(char *line, int step, int *start_map, int line_nbr)
 
 	old_step = step;
 	if (line[0] != '\n' && !ft_strncmp(line, "NO ", 3))
-		step += add_texture(line, &data_()->textures[WALL_][2].path, 1); //X
+		step += add_texture(line, &data_()->textures[WALL_][2].path, 1);
 	else if (line[0] != '\n' && !ft_strncmp(line, "SO ", 3))
-		step += add_texture(line, &data_()->textures[WALL_][3].path, 10); //X
+		step += add_texture(line, &data_()->textures[WALL_][3].path, 10);
 	else if (line[0] != '\n' && !ft_strncmp(line, "WE ", 3))
 		step += add_texture(line, &data_()->textures[WALL_][0].path, 100);
 	else if (line[0] != '\n' && !ft_strncmp(line, "EA ", 3))
